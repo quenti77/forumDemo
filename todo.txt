@@ -1,0 +1,52 @@
+Ce que l'on va faire :
+
+Il s'agit d'un forum avec un espace membre.
+Le but est plus de montrer les bonnes pratiques que de faire un forum complet
+mais l'exercice permet de mieux comprendre et de pratiquer.
+
+--------------------------------------------------
+Avec les parties suivantes :
+
+Partie espace membre :
+    - Inscription
+    - Connexion
+    - Vérification de l'adresse mail
+    - Déconnexion
+    - Voir les profils
+
+Partie forum :
+    - Voir les catégories
+    - Voir les forums
+    - Voir les topics
+    - Voir les posts
+    
+    - Créer un topic
+    - Répondre à un post
+    - Modifier un post
+    - Supprimer un post
+    - Mettre en résolu un post et son topic
+
+Partie administration :
+    - Voir la liste des utilisateurs
+    - Ajouter des catégories
+    - Ajouter des forums
+
+    - Modifier tous les posts
+    - Modifier tous les topics
+    - Modifier les forums
+    - Modifier les catégories
+
+    - Verrouiller un topic
+
+--------------------------------------------------
+Les données que l'on veut :
+
+users: id, name, password, email, email_token, register_at, connection_at, rank
+categories: id, name, order
+forums: id, category_id, name, description, topic_count, post_count, last_post_id
+topics: id, forum_id, user_id, name, description, reply_count, resolved, locked, first_post_id, last_post_id
+posts: id, topic_id, user_id, content, posted_at, updated_at, resolved
+
+
+--------------------------------------------------
+Voir ensuite le dossier chapitres
