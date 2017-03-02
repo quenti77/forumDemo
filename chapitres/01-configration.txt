@@ -2,6 +2,7 @@ Chapitre 1: Configuration de l'environnement
 
 Création du dossier du projet: "G:\web\php\forum"
 Création du virtualhost dans le dossier alias de wamp:
+--------------------------------------------------
 <VirtualHost local.forum:80>
 
   ServerAdmin admin@local.forum
@@ -17,6 +18,7 @@ Création du virtualhost dans le dossier alias de wamp:
   </Directory>
 
 </VirtualHost>
+--------------------------------------------------
 
 Redémarrage de wamp et ajout dans le fichier
 hosts de windows du nom de domaine : "local.forum"

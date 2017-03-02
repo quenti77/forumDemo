@@ -1,0 +1,7 @@
+# htaccess pour rédiriger vers l'application les routes
+RewriteEngine On
+
+# On redirige pour tous les fichiers et dossiers qui n'existe pas
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ /index.php?url=$1

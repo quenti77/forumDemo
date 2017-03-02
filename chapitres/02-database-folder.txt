@@ -8,7 +8,7 @@ GRANT ALL PRIVILEGES ON tuto.* TO 'tuto'@'localhost';
 FLUSH PRIVILEGES;
 
 Création des différentes tables:
-    - voir les fichiers create.sql et data.sql
+    -> voir les fichiers create.sql et data.sql
 
 Création des différents dossiers:
 
