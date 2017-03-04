@@ -11,15 +11,19 @@ $url = (isset($_GET['url'])) ? $_GET['url'] : '';
 
 // On inclus les fonctions de base pour le MVC
 require APP.'/routes/router.php';
+require APP.'/controllers/controller.php';
+require APP.'/models/model.php';
 
 // On y ajoute nos routes
 require APP.'/routes/home.php';
 
 // On lance la recherche d'une route
 $route = run(method(), $url);
-// Si on en trouve une
 if ($route) {
-    var_dump($route, $_GET);
+    // Si on en trouve une
+    // On require le contrôleur demandé
+    $controllerPath = realpath(APP.'/controllers/'.$route['controller'].'.php');
+    require $controllerPath;
 } else {
     // Sinon c'est que la page demandé n'existe pas
     // On affiche une page d'erreur 404
