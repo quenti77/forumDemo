@@ -41,13 +41,22 @@
                 <li><a href="/">Mon profile</a></li>
                 <li><a href="/">Se déconnecter</a></li>
                 <li><a href="/">Se connecter</a></li>
-                <li><a href="/">S'inscrire</a></li>
+                <li><a href="/register">S'inscrire</a></li>
             </ul>
         </div>
     </div>
 </nav>
 
 <div class="container">
+    <?php $flash = (isset($_SESSION['flash'])) ? $_SESSION['flash'] : null; ?>
+    <?php if ($flash): ?>
+        <?php unset($_SESSION['flash']); ?>
+        <div class="alert alert-dismissible alert-<?= $flash['type'] ?>">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <?= $flash['content'] ?>
+        </div>
+    <?php endif; ?>
+
     <?= $content ?>
 </div>
 

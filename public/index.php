@@ -19,6 +19,7 @@ require APP.'/models/model.php';
 
 // On y ajoute nos routes
 require APP.'/routes/home.php';
+require APP.'/routes/account.php';
 
 // On lance la recherche d'une route
 $route = run(method(), $url);

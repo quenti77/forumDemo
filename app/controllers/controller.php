@@ -1,6 +1,73 @@
 <?php
 
 /**
+ * Permet d'enregistrer un message flash
+ *
+ * @param string $type
+ * @param string $content
+ */
+function setFlash($type, $content)
+{
+    $_SESSION['flash'] = compact('type', 'content');
+}
+
+/**
+ * Permet d'enregistrer les erreurs et le formulaire
+ *
+ * @param array $errors
+ * @param array $post
+ */
+function setErrors($errors, $post)
+{
+    // On enregistre notre formulaire
+    $_SESSION['post'] = $post;
+
+    $content = '<span>Des erreurs sont survenu :</span><ul>';
+    foreach ($errors as $error) {
+        $content .= '<li>'.$error.'</li>';
+    }
+    $content .= '</ul>';
+
+    // On enregistre le contenu de l'erreur
+    setFlash('danger', $content);
+}
+
+/**
+ * Permet de récupérer les données et de les fusionner
+ * pour les retrouver en cas d'erreur par exemple
+ *
+ * @param array $base
+ * @return array
+ */
+function sessionPost($base = [])
+{
+    // Notre tableau qui aura les dernières données
+    // et les données par défaut
+    $post = [];
+
+    // Si on trouve d'ancienne données
+    if (isset($_SESSION['post'])) {
+        // On les stoque
+        $post = $_SESSION['post'];
+
+        // On efface pour ne pas les reprendre
+        unset($_SESSION['post']);
+    }
+
+    // Au cas ou que post ne soit pas un tableau
+    if (!is_array($post)) {
+        $post = [$post];
+    }
+
+    // On va fusionner les tableaux mais attention au sens
+    // On fusione le tableau récupérer à celui de nos données de base
+    $post = array_merge($base, $post);
+
+    // On retourne le résultat
+    return $post;
+}
+
+/**
  * Permet de récupérer ce qui se trouve en GET
  * ou en POST avec une préférence pour le GET.
  *

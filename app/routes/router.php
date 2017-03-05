@@ -27,6 +27,18 @@ function trimUrl($url)
 }
 
 /**
+ * Redirige vers l'url demandé avec les bon headers
+ *
+ * @param string $url
+ */
+function redirectTo($url)
+{
+    header('HTTP/1.1 301 Moved Permanently', false, 301);
+    header("location: {$url}");
+    exit;
+}
+
+/**
  * Ajoute une nouvelle url à notre application
  * Le tableau routes est un tableau de tableau contenant des cases
  * qui sont des tableaux.
