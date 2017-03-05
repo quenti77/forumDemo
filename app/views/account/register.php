@@ -8,14 +8,14 @@
         <div class="form-group">
             <label for="name">Votre pseudo :</label>
             <input type="text" class="form-control input-sm" name="name"
-                   placeholder="Votre pseudo ...">
+                   placeholder="Votre pseudo ..." value="<?= $post['name'] ?>">
         </div>
 
         <!-- L'adresse mail -->
         <div class="form-group">
             <label for="email">Votre adresse mail :</label>
             <input type="email" class="form-control input-sm" name="email"
-                   placeholder="Votre@mail.tld ...">
+                   placeholder="Votre@mail.tld ..." value="<?= $post['email'] ?>">
         </div>
 
         <!-- Le mot de passe -->
