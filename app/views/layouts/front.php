@@ -17,6 +17,7 @@
 
     <link rel="stylesheet" href="https://bootswatch.com/flatly/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/main.css">
 
     <!-- Titre -->
     <title>Mon super forum</title>
@@ -40,7 +41,7 @@
                 <li><a href="/">Administration</a></li>
                 <li><a href="/">Mon profile</a></li>
                 <li><a href="/">Se déconnecter</a></li>
-                <li><a href="/">Se connecter</a></li>
+                <li><a href="/login">Se connecter</a></li>
                 <li><a href="/register">S'inscrire</a></li>
             </ul>
         </div>
@@ -58,6 +59,17 @@
     <?php endif; ?>
 
     <?= $content ?>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <h2>La session :</h2>
+            <?php var_dump($_SESSION); ?>
+        </div>
+        <div class="col-sm-6">
+            <h2>Les cookie :</h2>
+            <?php var_dump($_COOKIE); ?>
+        </div>
+    </div>
 </div>
 
 <!-- jQuery -->

@@ -33,6 +33,30 @@ function getUserByNameOrEmail(PDO $db, $name, $email)
 }
 
 /**
+ * Permet de récupérer un utilisateur par son id
+ *
+ * @param PDO $db
+ * @param $userId
+ * @return array|false
+ */
+function getUserById(PDO $db, $userId)
+{
+    // Récupération des champs pour la tables users
+    // ou l'id vaut $userId et prends en qu'un seul
+    $reqSelect = $db->prepare(
+        'SELECT id, name, password, email, email_token, register_at, connection_at, rank
+        FROM users
+        WHERE id = :userId
+        LIMIT 0, 1');
+
+    $reqSelect->bindValue(':userId', $userId, PDO::PARAM_INT);
+    $reqSelect->execute();
+
+    // On retourne le résultat
+    return $reqSelect->fetch();
+}
+
+/**
  * Inscription de l'utilisateur dans la BDD
  *
  * @param PDO $db
@@ -52,4 +76,30 @@ function registerUser(PDO $db, $user)
     $reqInsert->execute();
 
     return intval($db->lastInsertId());
+}
+
+/**
+ * Met à jour la date de connexion
+ *
+ * @param PDO $db
+ * @param array $user
+ */
+function updateUser(PDO $db, $user)
+{
+    $reqUpdate = $db->prepare(
+        'UPDATE users
+        SET name = :name,
+            email = :email,
+            email_token = :email_token,
+            connection_at = :connection_at,
+            rank = :rank
+        WHERE id = :userId');
+
+    $reqUpdate->bindValue(':name', $user['name'], PDO::PARAM_STR);
+    $reqUpdate->bindValue(':email', $user['email'], PDO::PARAM_STR);
+    $reqUpdate->bindValue(':email_token', $user['email_token'], PDO::PARAM_STR);
+    $reqUpdate->bindValue(':connection_at', $user['connection_at'], PDO::PARAM_STR);
+    $reqUpdate->bindValue(':rank', $user['rank'], PDO::PARAM_STR);
+    $reqUpdate->bindValue(':userId', $user['id'], PDO::PARAM_INT);
+    $reqUpdate->execute();
 }
