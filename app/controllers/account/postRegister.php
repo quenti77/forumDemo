@@ -100,6 +100,57 @@ if (empty($errors)) {
     // On on y sauvegarde l'id
     $user['id'] = registerUser($db, $user);
 
+    // Utilisation de PHPMailer pour l'envoie du mail
+    $mail = new PHPMailer();
+
+    // On active la visibilité des erreurs SMTP
+    $mail->SMTPDebug = 3;
+
+    // On change certaines options du SSL
+    $mail->SMTPOptions = [
+        'ssl' => [
+            'verify_peer' => false,
+            'verify_peer_name' => false,
+            'allow_self_signed' => true
+        ]
+    ];
+
+    // On indique que l'on veut envoyer le mail via du SMTP
+    $mail->isSMTP();
+
+    // On indique notre serveur SMTP (local avec maildev)
+    $mail->Host = 'local.forum';
+    $mail->Port = 1025;
+    $mail->SMTPAuth = false;
+
+    // From
+    $mail->setFrom('admin@local.forum', 'Admin du site');
+
+    // To
+    $mail->addAddress($email, explode('@', $email)[0]);
+
+    // On défini notre mail en HTML
+    $mail->isHTML(true);
+
+    // Subject
+    $mail->Subject = 'Vérification de votre adresse mail - MonSuperForum';
+
+    // On va faire le rendu de notre mail mais on va
+    // le stoquer pour le mettre dans le mail
+    ob_start();
+    render('mails/verify.html', null, compact('user'));
+    $mail->Body = ob_get_clean();
+
+    // On y mets la version sans html pour le mail texte
+    ob_start();
+    render('mails/verify.text', null, compact('user'));
+    $mail->AltBody = ob_get_clean();
+
+    // On envoie le mail
+    ob_start();
+    $mail->send();
+    ob_end_clean();
+
     // On redirige vers la page d'accueil
     setFlash('success', 'Un mail de confirmation vous a été envoyé');
     redirectTo('/');
