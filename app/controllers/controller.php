@@ -99,6 +99,10 @@ function render($page, $layout = null, $variables = [])
     // les variables correspondantes
     extract($variables);
 
+    // Ajout d'une variable représentant l'utilisateur
+    // connecté ou null s'il ne l'es pas.
+    $auth = (isset($_SESSION['auth'])) ? $_SESSION['auth'] : null;
+
     // Rendu de notre page
     ob_start();
 

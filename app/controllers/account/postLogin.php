@@ -4,6 +4,11 @@
  * Vérification du formulaire de connexion
  */
 
+if (isset($_SESSION['auth'])) {
+    redirectTo('/');
+    exit;
+}
+
 // Notre model users
 requireModel('users');
 

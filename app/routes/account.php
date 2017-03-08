@@ -10,3 +10,6 @@ addRoute('post', '/login', 'account/postLogin');
 
 // Vérification de l'adresse mail
 addRoute('get', '/verify/:id-:token', 'account/checkMail');
+
+// Déconnexion
+addRoute('get', '/logout', 'account/logout');

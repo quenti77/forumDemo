@@ -4,6 +4,11 @@
  * Formulaire d'inscription au site
  */
 
+if (isset($_SESSION['auth'])) {
+    redirectTo('/');
+    exit;
+}
+
 // On doit reprendre les données en post (à faire après)
 $post = sessionPost([
     'name' => '',

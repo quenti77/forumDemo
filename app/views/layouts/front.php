@@ -38,11 +38,16 @@
 
         <div class="collapse navbar-collapse" id="menuMobile">
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="/">Administration</a></li>
-                <li><a href="/">Mon profile</a></li>
-                <li><a href="/">Se déconnecter</a></li>
-                <li><a href="/login">Se connecter</a></li>
-                <li><a href="/register">S'inscrire</a></li>
+                <?php if ($auth): ?>
+                    <?php if ($auth['rank'] >= 3): ?>
+                        <li><a href="/">Administration</a></li>
+                    <?php endif; ?>
+                    <li><a href="/">Mon profile</a></li>
+                    <li><a href="/logout">Se déconnecter</a></li>
+                <?php else: ?>
+                    <li><a href="/login">Se connecter</a></li>
+                    <li><a href="/register">S'inscrire</a></li>
+                <?php endif; ?>
             </ul>
         </div>
     </div>

@@ -4,6 +4,11 @@
  * Vérification du formulaire pour l'inscription
  */
 
+if (isset($_SESSION['auth'])) {
+    redirectTo('/');
+    exit;
+}
+
 // On charge notre model pour les utilisateurs
 requireModel('users');
 
