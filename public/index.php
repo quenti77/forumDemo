@@ -25,6 +25,7 @@ require ROOT.'/libs/phpmailer/class.phpmailer.php';
 // On y ajoute nos routes
 require APP.'/routes/home.php';
 require APP.'/routes/account.php';
+require APP.'/routes/forum.php';
 
 // Sur toute les pages on veut pouvoir reconnecter la personne
 // si le cookie existe mais que la session n'existe plus

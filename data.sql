@@ -14,8 +14,8 @@ INSERT INTO categories (name, sorted) VALUES
 # Forums
 INSERT INTO forums (category_id, name, description, topic_count, post_count, last_post_id) VALUES
     (1, 'HTML / CSS', 'Un problème de structure ou d\'implémentation. Par ici', 0, 0, NULL),
-    (2, 'PHP', 'Un script ne fonctionne pas ? Demandez de l\'aide sur ce forum', 0, 0, NULL),
-    (1, 'Javscript', 'Votre bouton ne fonctionne pas ? Demander par ici', 0, 0, NULL),
+    (2, 'PHP', 'Un script ne fonctionne pas ? Demandez de l\'aide sur ce forum', 2, 3, 3),
+    (1, 'Javscript', 'Votre bouton ne fonctionne pas ? Demander par ici', 1, 2, 5),
     (3, 'Affinity Designer', 'Vous n\'arrivez pas à faire votre maquette ?', 0, 0, NULL);
 
 # Topics
