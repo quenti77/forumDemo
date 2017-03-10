@@ -46,3 +46,25 @@
     </div>
 </div>
 
+<?php if ($auth): ?>
+<div class="row">
+    <form action="/forums/<?= $forum['id'] ?>/topics/<?= $topic['id'] ?>"
+          method="post" class="col-sm-12">
+
+        <!-- Le token CSRF -->
+        <input type="hidden" name="csrf" value="<?= $csrf ?>">
+
+        <!-- Le contenu -->
+        <div class="form-group">
+            <label for="content">Votre réponse :</label>
+            <textarea placeholder="Le contenu de votre réponse ..." rows="7"
+                      class="form-control input-sm" name="content"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">
+            Répondre
+        </button>
+
+    </form>
+</div>
+<?php endif; ?>

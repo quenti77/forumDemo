@@ -5,3 +5,6 @@ addRoute('get', '/forums/:idForum', 'forum/topic');
 
 // La route pour voir les posts d'un topic
 addRoute('get', '/forums/:idForum/topics/:idTopic', 'forum/post');
+
+// Ajout d'un post au topic
+addRoute('post', '/forums/:idForum/topics/:idTopic', 'forum/postPost');

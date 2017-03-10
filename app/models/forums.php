@@ -20,3 +20,23 @@ function getForumById(PDO $db, $idForum)
 
     return $reqSelect->fetch();
 }
+
+/**
+ * Permet de récupèrer les informations
+ * du topic par rapport à son id
+ *
+ * @param PDO $db
+ * @param $idForum
+ * @param $idPost
+ */
+function updateForumPost(PDO $db, $idForum, $idPost)
+{
+    $reqSelect = $db->prepare(
+        'UPDATE forums
+        SET last_post_id = :idPost, post_count = `post_count` + 1
+        WHERE id = :idForum');
+
+    $reqSelect->bindValue(':idPost', intval($idPost), PDO::PARAM_INT);
+    $reqSelect->bindValue(':idForum', intval($idForum), PDO::PARAM_INT);
+    $reqSelect->execute();
+}

@@ -46,5 +46,11 @@ if ($topic === false) {
 // On charge les topics
 $posts = getPostsByTopicId($db, $idForum);
 
+// On génère un token CSRF
+$csrf = hash('sha512', uniqid().'---'.time());
+
+// On le stoque en session avant de le passer à la vue
+$_SESSION['csrf'] = $csrf;
+
 // Rendu de la page
-render('forum/post', 'front', compact('forum', 'topic', 'posts'));
+render('forum/post', 'front', compact('forum', 'topic', 'posts', 'csrf'));

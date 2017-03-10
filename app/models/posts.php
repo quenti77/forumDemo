@@ -24,3 +24,24 @@ function getPostsByTopicId(PDO $db, $idTopic)
 
     return $reqSelect;
 }
+
+/**
+ * Ajoute un post
+ *
+ * @param PDO $db
+ * @param array $post
+ * @return int
+ */
+function insertPost(PDO $db, $post)
+{
+    $reqInsert = $db->prepare(
+        'INSERT INTO posts (topic_id, user_id, content, posted_at, updated_at, resolved) 
+        VALUES (:topicId, :userId, :content, NOW(), NULL, 0)');
+
+    $reqInsert->bindValue(':topicId', $post['topicId'], PDO::PARAM_INT);
+    $reqInsert->bindValue(':userId', $post['userId'], PDO::PARAM_INT);
+    $reqInsert->bindValue(':content', $post['content'], PDO::PARAM_STR);
+    $reqInsert->execute();
+
+    return intval($db->lastInsertId());
+}

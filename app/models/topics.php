@@ -46,3 +46,23 @@ function getTopicById(PDO $db, $idTopic)
 
     return $reqSelect->fetch();
 }
+
+/**
+ * Permet de récupèrer les informations
+ * du topic par rapport à son id
+ *
+ * @param PDO $db
+ * @param $idTopic
+ * @param $idPost
+ */
+function updateTopicPost(PDO $db, $idTopic, $idPost)
+{
+    $reqSelect = $db->prepare(
+        'UPDATE topics
+        SET last_post_id = :idPost, reply_count = `reply_count` + 1
+        WHERE id = :idTopic');
+
+    $reqSelect->bindValue(':idPost', intval($idPost), PDO::PARAM_INT);
+    $reqSelect->bindValue(':idTopic', intval($idTopic), PDO::PARAM_INT);
+    $reqSelect->execute();
+}
