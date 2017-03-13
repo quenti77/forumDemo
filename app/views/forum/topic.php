@@ -11,6 +11,11 @@
         <a href="/" class="btn btn-primary">
             Revenir à l'accueil
         </a>
+        <?php if ($auth): ?>
+            <a href="/forums/<?= $forum['id'] ?>/newTopic" class="btn btn-success">
+                Nouveau topic
+            </a>
+        <?php endif; ?>
     </div>
 </div>
 <div class="row">

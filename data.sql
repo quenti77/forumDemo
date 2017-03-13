@@ -18,6 +18,13 @@ INSERT INTO forums (category_id, name, description, topic_count, post_count, las
     (1, 'Javscript', 'Votre bouton ne fonctionne pas ? Demander par ici', 1, 2, 5),
     (3, 'Affinity Designer', 'Vous n\'arrivez pas à faire votre maquette ?', 0, 0, NULL);
 
+# Forums (empty)
+INSERT INTO forums (category_id, name, description, topic_count, post_count, last_post_id) VALUES
+    (1, 'HTML / CSS', 'Un problème de structure ou d\'implémentation. Par ici', 0, 0, NULL),
+    (2, 'PHP', 'Un script ne fonctionne pas ? Demandez de l\'aide sur ce forum', 0, 0, NULL),
+    (1, 'Javscript', 'Votre bouton ne fonctionne pas ? Demander par ici', 0, 0, NULL),
+    (3, 'Affinity Designer', 'Vous n\'arrivez pas à faire votre maquette ?', 0, 0, NULL);
+
 # Topics
 INSERT INTO topics (forum_id, user_id, name, description, reply_count, resolved, locked, first_post_id, last_post_id) VALUES
     (2, 2, 'Syntax error dans mon PHP', 'Je ne comprends pas mon script bug !', 1, 1, 0, 1, 3),

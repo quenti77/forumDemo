@@ -44,7 +44,7 @@ if ($topic === false) {
 }
 
 // On charge les topics
-$posts = getPostsByTopicId($db, $idForum);
+$posts = getPostsByTopicId($db, $idTopic);
 
 // On génère un token CSRF
 $csrf = hash('sha512', uniqid().'---'.time());
