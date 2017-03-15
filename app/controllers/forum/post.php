@@ -4,6 +4,18 @@
  * Affichage de la liste des posts du topic
  */
 
+/**
+ * Est-ce que l'on peut edit/remove un post ?
+ *
+ * @param array|null $auth
+ * @param array $post
+ * @return bool
+ */
+function checkPermit($auth, $post)
+{
+    return ($auth['rank'] >= 3 || $post['user_id'] == $auth['id']);
+}
+
 // On charge nos modèles
 requireModel('forums');
 requireModel('topics');

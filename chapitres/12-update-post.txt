@@ -25,3 +25,6 @@ Création du fichier app/controllers/forum/postUpdatePost.php
 
 Ajout de la méthode updatePost dans le model app/models/posts.php
 Ajout du nl2br et du htmlentities pour le $post['content'] du forum
+
+Vérification des droits pour les boutons avec l'ajout de la fonction checkPermit
+dans le fichier app/controllers/forum/post.php

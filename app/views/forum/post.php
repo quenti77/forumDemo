@@ -37,16 +37,18 @@
                         </div>
                     </td>
                     <td>
-                        <div class="text-right">
-                            <a href="/forums/<?= $forum['id'] ?>/topics/<?= $topic['id'] ?>/posts/<?= $post['post_id'] ?>/update"
-                               class="btn btn-info btn-sm">
-                                <i class="fa fa-pencil"></i>
-                            </a>
-                            <a href="/forums/<?= $forum['id'] ?>/topics/<?= $topic['id'] ?>/posts/<?= $post['post_id'] ?>/remove"
-                               class="btn btn-danger btn-sm">
-                                <i class="fa fa-trash"></i>
-                            </a>
-                        </div>
+                        <?php if (checkPermit($auth, $post)): ?>
+                            <div class="text-right">
+                                <a href="/forums/<?= $forum['id'] ?>/topics/<?= $topic['id'] ?>/posts/<?= $post['post_id'] ?>/update"
+                                   class="btn btn-info btn-sm">
+                                    <i class="fa fa-pencil"></i>
+                                </a>
+                                <a href="/forums/<?= $forum['id'] ?>/topics/<?= $topic['id'] ?>/posts/<?= $post['post_id'] ?>/remove"
+                                   class="btn btn-danger btn-sm">
+                                    <i class="fa fa-trash"></i>
+                                </a>
+                            </div>
+                        <?php endif; ?>
                         <div>
                             <?= nl2br(htmlentities($post['content'])) ?>
                         </div>
