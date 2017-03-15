@@ -37,7 +37,7 @@ function getTopicsByForumId(PDO $db, $idForum)
 function getTopicById(PDO $db, $idTopic)
 {
     $reqSelect = $db->prepare(
-        'SELECT id, name, description, reply_count, resolved, locked
+        'SELECT id, name, description, reply_count, resolved, locked, first_post_id, last_post_id
         FROM topics
         WHERE id = :idTopic');
 
@@ -82,6 +82,25 @@ function updateTopicPost(PDO $db, $idTopic, $idPost)
     $reqSelect = $db->prepare(
         'UPDATE topics
         SET last_post_id = :idPost, reply_count = `reply_count` + 1
+        WHERE id = :idTopic');
+
+    $reqSelect->bindValue(':idPost', intval($idPost), PDO::PARAM_INT);
+    $reqSelect->bindValue(':idTopic', intval($idTopic), PDO::PARAM_INT);
+    $reqSelect->execute();
+}
+
+/**
+ * Change le last_post_id et le reply_count
+ *
+ * @param PDO $db
+ * @param $idTopic
+ * @param $idPost
+ */
+function removeTopicPost(PDO $db, $idTopic, $idPost)
+{
+    $reqSelect = $db->prepare(
+        'UPDATE topics
+        SET last_post_id = :idPost, reply_count = `reply_count` - 1
         WHERE id = :idTopic');
 
     $reqSelect->bindValue(':idPost', intval($idPost), PDO::PARAM_INT);

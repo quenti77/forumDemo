@@ -49,6 +49,20 @@ function getPostById(PDO $db, $idPost)
     return $reqSelect->fetch();
 }
 
+function findLastPostTopic(PDO $db, $idTopic)
+{
+    $reqSelect = $db->prepare(
+        'SELECT id, topic_id, user_id, content, posted_at, updated_at, resolved
+        FROM posts
+        WHERE topic_id = :idTopic
+        ORDER BY id DESC
+        LIMIT 0, 1');
+    $reqSelect->bindValue(':idTopic', $idTopic, PDO::PARAM_INT);
+    $reqSelect->execute();
+
+    return $reqSelect->fetch();
+}
+
 /**
  * Ajoute un post
  *
@@ -86,6 +100,19 @@ function updatePost(PDO $db, $post)
     $reqUpdate->bindValue(':content', $post['content'], PDO::PARAM_STR);
     $reqUpdate->bindValue(':postId', $post['post_id'], PDO::PARAM_INT);
     $reqUpdate->execute();
+}
+
+/**
+ * Suppression d'un post
+ *
+ * @param PDO $db
+ * @param int $postId
+ */
+function removePost(PDO $db, $postId)
+{
+    $reqDelete = $db->prepare('DELETE FROM posts WHERE id = :postId');
+    $reqDelete->bindValue(':postId', $postId, PDO::PARAM_INT);
+    $reqDelete->execute();
 }
 
 /**

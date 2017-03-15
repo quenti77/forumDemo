@@ -39,14 +39,21 @@
                     <td>
                         <?php if (checkPermit($auth, $post)): ?>
                             <div class="text-right">
-                                <a href="/forums/<?= $forum['id'] ?>/topics/<?= $topic['id'] ?>/posts/<?= $post['post_id'] ?>/update"
-                                   class="btn btn-info btn-sm">
-                                    <i class="fa fa-pencil"></i>
-                                </a>
-                                <a href="/forums/<?= $forum['id'] ?>/topics/<?= $topic['id'] ?>/posts/<?= $post['post_id'] ?>/remove"
-                                   class="btn btn-danger btn-sm">
-                                    <i class="fa fa-trash"></i>
-                                </a>
+                                <form action="/forums/<?= $forum['id'] ?>/topics/<?= $topic['id'] ?>/posts/<?= $post['post_id'] ?>/remove"
+                                      method="post">
+
+                                    <!-- Le token CSRF -->
+                                    <input type="hidden" name="csrf" value="<?= $csrf ?>">
+
+                                    <a href="/forums/<?= $forum['id'] ?>/topics/<?= $topic['id'] ?>/posts/<?= $post['post_id'] ?>/update"
+                                       class="btn btn-info btn-sm">
+                                        <i class="fa fa-pencil"></i>
+                                    </a>
+
+                                    <button class="btn btn-danger btn-sm" type="submit">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </form>
                             </div>
                         <?php endif; ?>
                         <div>
@@ -61,24 +68,24 @@
 </div>
 
 <?php if ($auth): ?>
-<div class="row">
-    <form action="/forums/<?= $forum['id'] ?>/topics/<?= $topic['id'] ?>"
-          method="post" class="col-sm-12">
+    <div class="row">
+        <form action="/forums/<?= $forum['id'] ?>/topics/<?= $topic['id'] ?>"
+              method="post" class="col-sm-12">
 
-        <!-- Le token CSRF -->
-        <input type="hidden" name="csrf" value="<?= $csrf ?>">
+            <!-- Le token CSRF -->
+            <input type="hidden" name="csrf" value="<?= $csrf ?>">
 
-        <!-- Le contenu -->
-        <div class="form-group">
-            <label for="content">Votre réponse :</label>
-            <textarea placeholder="Le contenu de votre réponse ..." rows="7"
-                      class="form-control input-sm" name="content"></textarea>
-        </div>
+            <!-- Le contenu -->
+            <div class="form-group">
+                <label for="content">Votre réponse :</label>
+                <textarea placeholder="Le contenu de votre réponse ..." rows="7"
+                          class="form-control input-sm" name="content"></textarea>
+            </div>
 
-        <button type="submit" class="btn btn-primary btn-block">
-            Répondre
-        </button>
+            <button type="submit" class="btn btn-primary btn-block">
+                Répondre
+            </button>
 
-    </form>
-</div>
+        </form>
+    </div>
 <?php endif; ?>

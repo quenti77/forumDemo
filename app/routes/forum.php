@@ -16,3 +16,6 @@ addRoute('post', '/forums/:idForum/newTopic', 'forum/postNewTopic');
 // Mise à jour d'un post
 addRoute('get', '/forums/:idForum/topics/:idTopic/posts/:idPost/update', 'forum/updatePost');
 addRoute('post', '/forums/:idForum/topics/:idTopic/posts/:idPost/update', 'forum/postUpdatePost');
+
+// Suppression d'un post
+addRoute('post', '/forums/:idForum/topics/:idTopic/posts/:idPost/remove', 'forum/postRemovePost');
