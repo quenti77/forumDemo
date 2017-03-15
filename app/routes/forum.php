@@ -12,3 +12,7 @@ addRoute('post', '/forums/:idForum/topics/:idTopic', 'forum/postPost');
 // Formulaire d'ajout de topic
 addRoute('get', '/forums/:idForum/newTopic', 'forum/newTopic');
 addRoute('post', '/forums/:idForum/newTopic', 'forum/postNewTopic');
+
+// Mise à jour d'un post
+addRoute('get', '/forums/:idForum/topics/:idTopic/posts/:idPost/update', 'forum/updatePost');
+addRoute('post', '/forums/:idForum/topics/:idTopic/posts/:idPost/update', 'forum/postUpdatePost');

@@ -4,18 +4,6 @@
  * Affichage de la liste des posts du topic
  */
 
-/**
- * @param $post
- * @return DateTime
- */
-function postedAt($post)
-{
-    if ($post['updated_at']) {
-        return DateTime::createFromFormat('Y-m-d H:i:s', $post['updated_at']);
-    }
-    return DateTime::createFromFormat('Y-m-d H:i:s', $post['posted_at']);
-}
-
 // On charge nos modèles
 requireModel('forums');
 requireModel('topics');
@@ -47,10 +35,7 @@ if ($topic === false) {
 $posts = getPostsByTopicId($db, $idTopic);
 
 // On génère un token CSRF
-$csrf = hash('sha512', uniqid().'---'.time());
-
-// On le stoque en session avant de le passer à la vue
-$_SESSION['csrf'] = $csrf;
+$csrf = generateToken();
 
 // Rendu de la page
 render('forum/post', 'front', compact('forum', 'topic', 'posts', 'csrf'));

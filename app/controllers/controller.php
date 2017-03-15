@@ -93,6 +93,19 @@ function getParam($field)
     return null;
 }
 
+/**
+ * Permet de générer un token csrf que l'on mets en session
+ *
+ * @return string
+ */
+function generateToken()
+{
+    $token = hash('sha512', uniqid().'---'.time());
+
+    $_SESSION['csrf'] = $token;
+    return $token;
+}
+
 function render($page, $layout = null, $variables = [])
 {
     // Permet de prendre un tableau et d'en créer

@@ -33,10 +33,7 @@ $post = sessionPost([
 ]);
 
 // On génère un token CSRF
-$csrf = hash('sha512', uniqid().'---'.time());
-
-// On le stoque en session avant de le passer à la vue
-$_SESSION['csrf'] = $csrf;
+$csrf = generateToken();
 
 // Rendu de la page
 render('forum/newTopic', 'front', compact('forum', 'post', 'csrf'));
