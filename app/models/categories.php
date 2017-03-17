@@ -29,3 +29,74 @@ function getCategoriesAndForums(PDO $db)
     $reqSelect->execute();
     return $reqSelect;
 }
+
+/**
+ * @param PDO $db
+ * @return PDOStatement
+ */
+function getCategories(PDO $db)
+{
+    $reqSelect = $db->prepare('SELECT id, name, sorted FROM categories ORDER BY sorted DESC');
+    $reqSelect->execute();
+
+    return $reqSelect;
+}
+
+/**
+ * @param PDO $db
+ * @param int $idCategory
+ * @return array|false
+ */
+function getCategory(PDO $db, $idCategory)
+{
+    $reqSelect = $db->prepare('SELECT id, name, sorted FROM categories WHERE id = :idCategory');
+    $reqSelect->bindValue(':idCategory', $idCategory, PDO::PARAM_INT);
+    $reqSelect->execute();
+
+    return $reqSelect->fetch();
+}
+
+/**
+ * Ajout d'une nouvelle catégorie
+ *
+ * @param PDO $db
+ * @param string $name
+ * @param int $order
+ */
+function insertCategory(PDO $db, $name, $order)
+{
+    $reqInsert = $db->prepare('INSERT INTO categories (name, sorted) VALUES (:name, :order)');
+    $reqInsert->bindValue(':name', $name, PDO::PARAM_STR);
+    $reqInsert->bindValue(':order', $order, PDO::PARAM_INT);
+    $reqInsert->execute();
+}
+
+/**
+ * Modification d'une catégorie
+ *
+ * @param PDO $db
+ * @param int $idCategory
+ * @param string $name
+ * @param int $order
+ */
+function updateCategory(PDO $db, $idCategory, $name, $order)
+{
+    $reqInsert = $db->prepare('UPDATE categories SET name = :name, sorted = :order WHERE id = :idCategory');
+    $reqInsert->bindValue(':name', $name, PDO::PARAM_STR);
+    $reqInsert->bindValue(':order', $order, PDO::PARAM_INT);
+    $reqInsert->bindValue(':idCategory', $idCategory, PDO::PARAM_INT);
+    $reqInsert->execute();
+}
+
+/**
+ * Suppression de la catégorie
+ *
+ * @param PDO $db
+ * @param $categoryId
+ */
+function deleteCategory(PDO $db, $categoryId)
+{
+    $reqDelete = $db->prepare('DELETE FROM categories WHERE id = :categoryId');
+    $reqDelete->bindValue(':categoryId', $categoryId, PDO::PARAM_INT);
+    $reqDelete->execute();
+}

@@ -27,6 +27,26 @@ function getTopicsByForumId(PDO $db, $idForum)
 }
 
 /**
+ * Permet de récupèrer les topics via les id de forums
+ *
+ * @param PDO $db
+ * @param $forums
+ * @return PDOStatement
+ */
+function getTopicsByForums(PDO $db, $forums)
+{
+    $reqSelect = $db->prepare(
+        'SELECT id, forum_id, user_id, name, description, reply_count, resolved,
+            locked, first_post_id, last_post_id
+        FROM topics
+        WHERE forum_id IN ('.implode(',', $forums).')');
+
+    $reqSelect->execute();
+
+    return $reqSelect;
+}
+
+/**
  * Permet de récupèrer les informations
  * du topic par rapport à son id
  *
@@ -124,6 +144,18 @@ function removeTopicPost(PDO $db, $idTopic, $idPost)
     $reqSelect->bindValue(':idPost', intval($idPost), PDO::PARAM_INT);
     $reqSelect->bindValue(':idTopic', intval($idTopic), PDO::PARAM_INT);
     $reqSelect->execute();
+}
+
+/**
+ * Suppression des topics via les forums
+ *
+ * @param PDO $db
+ * @param $forums
+ */
+function deleteTopicsByForums(PDO $db, $forums)
+{
+    $reqDelete = $db->prepare('DELETE FROM topics WHERE forum_id IN ('.implode(',', $forums).')');
+    $reqDelete->execute();
 }
 
 /**

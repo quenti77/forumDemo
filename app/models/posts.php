@@ -134,6 +134,18 @@ function removePost(PDO $db, $postId)
 }
 
 /**
+ * Suppression des posts via les topics
+ *
+ * @param PDO $db
+ * @param $topics
+ */
+function deletePostsByTopics(PDO $db, $topics)
+{
+    $reqDelete = $db->prepare('DELETE FROM posts WHERE topic_id IN ('.implode(',', $topics).')');
+    $reqDelete->execute();
+}
+
+/**
  * @param $post
  * @return DateTime
  */
