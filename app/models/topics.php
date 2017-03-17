@@ -48,6 +48,24 @@ function getTopicById(PDO $db, $idTopic)
 }
 
 /**
+ * Compte le nombre de topics
+ *
+ * @param PDO $db
+ * @return int
+ */
+function countTopics(PDO $db)
+{
+    $reqSelect = $db->prepare('SELECT COUNT(*) AS nbTopics FROM topics');
+    $reqSelect->execute();
+
+    $user = $reqSelect->fetch();
+    if ($user) {
+        return intval($user['nbTopics']);
+    }
+    return 0;
+}
+
+/**
  * Ajoute un topic
  *
  * @param PDO $db

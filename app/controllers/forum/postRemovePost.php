@@ -7,7 +7,7 @@
 // On vérifie que ce dernier est connecté
 if (!isset($_SESSION['auth'])) {
     // Sinon on le redirige vers la page de connexion
-    setFlash('warning', 'Vous devez être connecté pour poster un message');
+    setFlash('warning', 'Vous devez être connecté pour supprimer un message');
     redirectTo('/login');
 }
 

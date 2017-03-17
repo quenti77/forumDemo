@@ -57,6 +57,31 @@ function getUserById(PDO $db, $userId)
 }
 
 /**
+ * Compte le nombre de compte utilisateurs
+ * totale ou seulement les comptes vérifiés
+ *
+ * @param PDO $db
+ * @param bool $onlyChecked
+ * @return int
+ */
+function countUsers(PDO $db, $onlyChecked)
+{
+    $sql = 'SELECT COUNT(*) AS nbUsers FROM users';
+    if ($onlyChecked) {
+        $sql .= ' WHERE email_token IS NULL';
+    }
+
+    $reqSelect = $db->prepare($sql);
+    $reqSelect->execute();
+
+    $user = $reqSelect->fetch();
+    if ($user) {
+        return intval($user['nbUsers']);
+    }
+    return 0;
+}
+
+/**
  * Inscription de l'utilisateur dans la BDD
  *
  * @param PDO $db

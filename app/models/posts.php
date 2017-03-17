@@ -64,6 +64,24 @@ function findLastPostTopic(PDO $db, $idTopic)
 }
 
 /**
+ * Compte le nombre de posts
+ *
+ * @param PDO $db
+ * @return int
+ */
+function countPosts(PDO $db)
+{
+    $reqSelect = $db->prepare('SELECT COUNT(*) AS nbPosts FROM posts');
+    $reqSelect->execute();
+
+    $user = $reqSelect->fetch();
+    if ($user) {
+        return intval($user['nbPosts']);
+    }
+    return 0;
+}
+
+/**
  * Ajoute un post
  *
  * @param PDO $db

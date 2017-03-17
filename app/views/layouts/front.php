@@ -40,7 +40,7 @@
             <ul class="nav navbar-nav navbar-right">
                 <?php if ($auth): ?>
                     <?php if ($auth['rank'] >= 3): ?>
-                        <li><a href="/">Administration</a></li>
+                        <li><a href="/admin">Administration</a></li>
                     <?php endif; ?>
                     <li><a href="/">Mon profile</a></li>
                     <li><a href="/logout">Se déconnecter</a></li>
