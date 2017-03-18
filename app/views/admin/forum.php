@@ -163,7 +163,7 @@
         <div class="col-md-offset-2 col-md-8">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    Liste des catégories
+                    Liste des forums
                 </div>
 
                 <div class="box-body">

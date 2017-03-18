@@ -24,6 +24,9 @@ if (empty($name)) {
 }
 
 $order = intval(getParam('order'));
+if ($order < -2000000 || $order > 2000000) {
+    $order = 0;
+}
 
 // On récupère nos informations
 requireModel('categories');
