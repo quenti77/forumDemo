@@ -42,6 +42,21 @@ function getForumById(PDO $db, $idForum)
 }
 
 /**
+ * @param PDO $db
+ * @return PDOStatement
+ */
+function getForums(PDO $db)
+{
+    $reqSelect = $db->prepare(
+        'SELECT id, category_id, name, description, topic_count, post_count, last_post_id
+        FROM forums
+        ORDER BY category_id');
+    $reqSelect->execute();
+
+    return $reqSelect;
+}
+
+/**
  * Permet de récupèrer les informations
  * du topic par rapport à son id
  *
@@ -101,6 +116,34 @@ function removeForumPost(PDO $db, $idForum, $idPost)
     $reqSelect->execute();
 }
 
+function insertForum(PDO $db, $idCategory, $name, $description)
+{
+    $reqInsert = $db->prepare(
+        'INSERT INTO forums (category_id, name, description, topic_count, post_count, last_post_id) 
+        VALUES (:idCategory, :name, :description, 0, 0, NULL)');
+
+    $reqInsert->bindValue(':idCategory', $idCategory, PDO::PARAM_INT);
+    $reqInsert->bindValue(':name', $name, PDO::PARAM_STR);
+    $reqInsert->bindValue(':description', $description, PDO::PARAM_STR);
+    $reqInsert->execute();
+}
+
+function updateForum(PDO $db, $idForum, $idCategory, $name, $description)
+{
+    $reqInsert = $db->prepare(
+        'UPDATE forums
+        SET category_id = :idCategory,
+            name = :name,
+            description = :description
+        WHERE id = :idForum');
+
+    $reqInsert->bindValue(':idForum', $idForum, PDO::PARAM_INT);
+    $reqInsert->bindValue(':idCategory', $idCategory, PDO::PARAM_INT);
+    $reqInsert->bindValue(':name', $name, PDO::PARAM_STR);
+    $reqInsert->bindValue(':description', $description, PDO::PARAM_STR);
+    $reqInsert->execute();
+}
+
 /**
  * Suppression des forums via la catégory
  *
@@ -111,5 +154,18 @@ function deleteForums(PDO $db, $categoryId)
 {
     $reqDelete = $db->prepare('DELETE FROM forums WHERE category_id = :categoryId');
     $reqDelete->bindValue(':categoryId', $categoryId, PDO::PARAM_INT);
+    $reqDelete->execute();
+}
+
+/**
+ * Suppression des forums via la catégory
+ *
+ * @param PDO $db
+ * @param $forumId
+ */
+function deleteForum(PDO $db, $forumId)
+{
+    $reqDelete = $db->prepare('DELETE FROM forums WHERE id = :forumId');
+    $reqDelete->bindValue(':forumId', $forumId, PDO::PARAM_INT);
     $reqDelete->execute();
 }

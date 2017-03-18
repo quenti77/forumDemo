@@ -13,7 +13,14 @@ if (!isset($_SESSION['auth']) || $_SESSION['auth']['rank'] < 3) {
 requireModel('categories');
 requireModel('forums');
 
-$categories = getCategories($db);
+$result = getCategories($db);
+$categories = [];
+
+foreach ($result as $category) {
+    $categories[] = $category;
+}
+
+$forums = getForums($db);
 $csrf = generateToken();
 
-render('admin/forum', 'admin', compact('categories', 'csrf'));
+render('admin/forum', 'admin', compact('categories', 'forums', 'csrf'));
