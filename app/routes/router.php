@@ -3,6 +3,13 @@
 // On sauvegarde nos urls et on ça pointe dans ce tableau
 $routes = []; // PS: Nouvelle syntaxe des tableaux
 
+// Les redirections possibles
+$redirections = [
+    '301' => 'Moved Permanently',
+    '302' => 'Moved Temporarily',
+    '303' => 'See Other'
+];
+
 /**
  * Permet de trim une url mais de
  * garder au minimum le root en /
@@ -30,10 +37,18 @@ function trimUrl($url)
  * Redirige vers l'url demandé avec les bon headers
  *
  * @param string $url
+ * @param int $code
  */
-function redirectTo($url)
+function redirectTo($url, $code = 301)
 {
-    header('HTTP/1.1 301 Moved Permanently', false, 301);
+    // On récupère nos code de redirections possible
+    global $redirections;
+
+    if (!in_array($code, $redirections)) {
+        $code = 301;
+    }
+
+    header("HTTP/1.1 {$code} {$redirections[$code]}", false, $code);
     header("location: {$url}");
     exit;
 }
