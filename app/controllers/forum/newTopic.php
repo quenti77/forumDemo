@@ -2,14 +2,11 @@
 
 /**
  * Formulaire pour la création d'un nouveau topic
+ *
+ * @var PDO $db
  */
 
-// On vérifie que ce dernier est connecté
-if (!isset($_SESSION['auth'])) {
-    // Sinon on le redirige vers la page de connexion
-    setFlash('warning', 'Vous devez être connecté pour poster un message');
-    redirectTo('/login');
-}
+userMiddleware();
 
 // On charge nos modèles
 requireModel('forums');
@@ -22,7 +19,7 @@ $forum = getForumById($db, $idForum);
 if ($forum === false) {
     // Le forum que l'on demande n'existe pas
     // On redirige avec un message flash
-    setFlash('danger', 'Le forum n\'existe pas ou plus.');
+    setFlash('danger', "Le forum n'existe pas ou plus.");
     redirectTo('/');
 }
 

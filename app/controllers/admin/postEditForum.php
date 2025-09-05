@@ -2,12 +2,11 @@
 
 /**
  * Ajout d'un forum
+ *
+ * @var PDO $db
  */
 
-if (!isset($_SESSION['auth']) || $_SESSION['auth']['rank'] < 3) {
-    setFlash('danger', 'Vous devez être administrateur pour venir');
-    redirectTo('/');
-}
+adminMiddleware();
 
 requireModel('forums');
 
@@ -20,9 +19,9 @@ if ($forum === false) {
 }
 
 $csrf = getParam('csrf');
-$csrfSession = isset($_SESSION['csrf']) ? $_SESSION['csrf'] : '';
+$csrfSession = $_SESSION['csrf'] ?? '';
 
-if ($csrf != $csrfSession) {
+if ($csrf !== $csrfSession) {
     setFlash('danger', 'Token invalide. Merci de régénérer un nouveau token');
     redirectTo('/admin/forums');
 }
@@ -32,7 +31,7 @@ $description = getParam('description');
 
 $name = getParam('name');
 if (empty($idCategory) || empty($name)) {
-    setFlash('danger', 'Vous n\'avez pas remplie tous les champs');
+    setFlash('danger', "Vous n'avez pas remplie tous les champs");
     redirectTo('/admin/forums');
 }
 

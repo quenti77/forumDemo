@@ -2,6 +2,8 @@
 
 /**
  * Affichage de la liste des posts du topic
+ *
+ * @var PDO $db
  */
 
 /**
@@ -11,9 +13,11 @@
  * @param array $post
  * @return bool
  */
-function checkPermit($auth, $post)
+function checkPermit(array|null $auth, array $post): bool
 {
-    return ($auth['rank'] >= 3 || $post['user_id'] == $auth['id']);
+    $rank = $auth['rank'] ?? 0;
+    $userId = $auth['id'] ?? null;
+    return ($rank >= ADMIN_RANK || $post['user_id'] === $userId);
 }
 
 // On charge nos modèles

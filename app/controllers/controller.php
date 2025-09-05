@@ -1,12 +1,32 @@
 <?php
 
+const ADMIN_RANK = 3;
+
+function userMiddleware(): void
+{
+    if (!isset($_SESSION['auth'])) {
+        setFlash('warning', 'Vous devez être connecté pour effectuer cette action');
+        redirectTo('/login');
+    }
+}
+
+function adminMiddleware(): void
+{
+    $rank = $_SESSION['auth']['rank'] ?? 0;
+    if ($rank < ADMIN_RANK) {
+        setFlash('danger', "Vous devez être connecté en tant qu'administrateur pour venir");
+        redirectTo('/');
+    }
+}
+
 /**
  * Permet d'enregistrer un message flash
  *
  * @param string $type
  * @param string $content
+ * @return void
  */
-function setFlash($type, $content)
+function setFlash(string $type, string $content): void
 {
     $_SESSION['flash'] = compact('type', 'content');
 }
@@ -16,8 +36,9 @@ function setFlash($type, $content)
  *
  * @param array $errors
  * @param array $post
+ * @return void
  */
-function setErrors($errors, $post)
+function setErrors(array $errors, array $post): void
 {
     // On enregistre notre formulaire
     $_SESSION['post'] = $post;
@@ -39,32 +60,30 @@ function setErrors($errors, $post)
  * @param array $base
  * @return array
  */
-function sessionPost($base = [])
+function sessionPost(array $base = []): array
 {
     // Notre tableau qui aura les dernières données
     // et les données par défaut
     $post = [];
 
-    // Si on trouve d'ancienne données
+    // Si on trouve d'anciennes données
     if (isset($_SESSION['post'])) {
-        // On les stoque
+        // On les gardes.
         $post = $_SESSION['post'];
 
         // On efface pour ne pas les reprendre
         unset($_SESSION['post']);
     }
 
-    // Au cas ou que post ne soit pas un tableau
+    // Au cas où que post ne soit pas un tableau
     if (!is_array($post)) {
         $post = [$post];
     }
 
-    // On va fusionner les tableaux mais attention au sens
-    // On fusione le tableau récupérer à celui de nos données de base
-    $post = array_merge($base, $post);
-
+    // On va fusionner les tableaux, mais attention au sens
+    // On fusionne le tableau récupéré à celui de nos données de base.
     // On retourne le résultat
-    return $post;
+    return array_merge($base, $post);
 }
 
 /**
@@ -77,20 +96,9 @@ function sessionPost($base = [])
  * @param string $field
  * @return null|string
  */
-function getParam($field)
+function getParam(string $field): string|null
 {
-    // On récupère les paramètres en GET ou en POST
-    // en privilégiant ceux en GET
-    if (isset($_GET[$field])) {
-        return $_GET[$field];
-    }
-
-    if (isset($_POST[$field])) {
-        return $_POST[$field];
-    }
-
-    // Si ça n'existe pas dans les 2
-    return null;
+    return $_GET[$field] ?? $_POST[$field] ?? null;
 }
 
 /**
@@ -98,15 +106,15 @@ function getParam($field)
  *
  * @return string
  */
-function generateToken()
+function generateToken(): string
 {
-    $token = hash('sha512', uniqid().'---'.time());
+    $token = hash('sha512', uniqid('', true).'---'.time());
 
     $_SESSION['csrf'] = $token;
     return $token;
 }
 
-function render($page, $layout = null, $variables = [])
+function render($page, $layout = null, $variables = []): void
 {
     // Permet de prendre un tableau et d'en créer
     // les variables correspondantes
@@ -114,22 +122,22 @@ function render($page, $layout = null, $variables = [])
 
     // Ajout d'une variable représentant l'utilisateur
     // connecté ou null s'il ne l'es pas.
-    $auth = (isset($_SESSION['auth'])) ? $_SESSION['auth'] : null;
+    $auth = $_SESSION['auth'] ?? null;
 
     // Rendu de notre page
     ob_start();
 
-    // Comme pour le contrôleur mais pour les vues
+    // Comme pour le contrôleur, mais pour les vues
     $viewPath = realpath(APP.'/views/'.$page.'.php');
     require $viewPath;
 
     $content = ob_get_clean();
 
-    // La partie layout qui englobe nos page
-    if ($layout != null) {
+    // La partie layout qui englobe nos pages
+    if ($layout !== null) {
         ob_start();
 
-        // Comme pour le contrôleur mais pour les vues
+        // Comme pour le contrôleur, mais pour les vues
         $layoutPath = realpath(APP.'/views/layouts/'.$layout.'.php');
         require $layoutPath;
 

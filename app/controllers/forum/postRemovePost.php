@@ -2,6 +2,8 @@
 
 /**
  * Suppression du post
+ *
+ * @var PDO $db
  */
 
 // On vérifie que ce dernier est connecté
@@ -26,7 +28,7 @@ $forum = getForumById($db, $idForum);
 if ($forum === false) {
     // Le forum que l'on demande n'existe pas
     // On redirige avec un message flash
-    setFlash('danger', 'Le forum n\'existe pas ou plus.');
+    setFlash('danger', "Le forum n'existe pas ou plus.");
     redirectTo('/');
 }
 
@@ -37,7 +39,7 @@ $topic = getTopicById($db, $idTopic);
 if ($topic === false) {
     // Le forum que l'on demande n'existe pas
     // On redirige avec un message flash
-    setFlash('danger', 'Le topic n\'existe pas ou plus.');
+    setFlash('danger', "Le topic n'existe pas ou plus.");
     redirectTo('/forums/'.$forum['id']);
 }
 
@@ -45,21 +47,21 @@ $idPost = getParam('idPost');
 $post = getPostById($db, $idPost);
 
 // On regarde si on peut modifier le post ou pas
-if ($auth['rank'] < 3 && $post['user_id'] != $auth['id']) {
+if ($auth['rank'] < ADMIN_RANK && $post['user_id'] !== $auth['id']) {
     // On a pas les droits
     setFlash('danger', 'Vous n\'êtes pas autorisé à supprimer ce post');
     redirectTo("/forums/{$forum['id']}/topics/{$topic['id']}");
 }
 
 $csrf = getParam('csrf');
-if (empty($_SESSION['csrf']) || $csrf != $_SESSION['csrf']) {
+if (empty($_SESSION['csrf']) || $csrf !== $_SESSION['csrf']) {
     setFlash('danger', 'Token invalide. Merci de régénérer un nouveau token');
     redirectTo("/forums/{$forum['id']}/topics/{$topic['id']}");
 }
 
 // Vérification si c'est le premier post du topic
-if ($topic['first_post_id'] == $post['post_id']) {
-    setFlash('warning', 'Vous ne pouvez pas supprimer ce post car c\'est le premier du topic');
+if ($topic['first_post_id'] === $post['post_id']) {
+    setFlash('warning', "Vous ne pouvez pas supprimer ce post car c'est le premier du topic");
     redirectTo("/forums/{$forum['id']}/topics/{$topic['id']}");
 }
 
@@ -68,7 +70,7 @@ $newLastPost = $post;
 removePost($db, $post['post_id']);
 
 // Changement du lastPostId si celui-ci est remove
-if ($post['post_id'] == $topic['last_post_id']) {
+if ($post['post_id'] === $topic['last_post_id']) {
     $newLastPost = findLastPostTopic($db, $topic['id']);
 }
 

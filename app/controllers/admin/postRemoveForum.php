@@ -2,12 +2,11 @@
 
 /**
  * Suppression d'un forum
+ *
+ * @var PDO $db
  */
 
-if (!isset($_SESSION['auth']) || $_SESSION['auth']['rank'] < 3) {
-    setFlash('danger', 'Vous devez être administrateur pour venir');
-    redirectTo('/');
-}
+adminMiddleware();
 
 requireModel('forums');
 requireModel('topics');
@@ -22,9 +21,9 @@ if ($forum === false) {
 }
 
 $csrf = getParam('csrf');
-$csrfSession = isset($_SESSION['csrf']) ? $_SESSION['csrf'] : '';
+$csrfSession = $_SESSION['csrf'] ?? '';
 
-if ($csrf != $csrfSession) {
+if ($csrf !== $csrfSession) {
     setFlash('danger', 'Token invalide. Merci de régénérer un nouveau token');
     redirectTo('/admin/forums');
 }
@@ -34,7 +33,7 @@ $result = getTopicsByForums($db, [$idForum]);
 $topics = [];
 
 foreach ($result as $topic) {
-    $topics[] = intval($topic['id']);
+    $topics[] = (int)$topic['id'];
 }
 
 // Suppression des posts lié au topics

@@ -1,0 +1,30 @@
+volumes:
+  db_data: { }
+  mailpit_data: { }
+
+services:
+  db:
+    image: mysql:9
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${ENV_DB_ROOT_PWD:-root}
+      MYSQL_DATABASE: ${ENV_DB_NAME:-forum_demo}
+      MYSQL_USER: ${ENV_DB_USER:-forum_demo}
+      MYSQL_PASSWORD: ${ENV_DB_PASSWORD:-forum_demo}
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "${ENV_DB_PORT:-3306}:3306"
+  mailpit:
+    image: axllent/mailpit
+    restart: unless-stopped
+    environment:
+      MP_MAX_MESSAGES: 5000
+      MP_DATABASE: /data/mailpit.db
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
+    volumes:
+      - mailpit_data:/data
+    ports:
+      - "${ENV_MP_PORT_WEB:-8025}:8025"
+      - "${ENV_MP_PORT_SMTP:-1025}:1025"

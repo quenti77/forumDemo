@@ -3,14 +3,11 @@
 session_start();
 
 // On garde certains chemin pour plus de compréhension
-define('ROOT', realpath(__DIR__.'/../'));
+define('ROOT', dirname(__DIR__) . '/');
 define('APP', realpath(ROOT.'/app'));
 
 // On récupère notre url
-$url = (isset($_SERVER['REQUEST_URI'])) ? $_SERVER['REQUEST_URI'] : '';
-if (empty($url)) {
-    $url = (isset($_GET['url'])) ? $_GET['url'] : '';
-}
+$url = $_SERVER['REQUEST_URI'] ?? $_GET['url'] ?? '';
 
 // On inclus les fonctions de base pour le MVC
 require APP.'/routes/router.php';
@@ -36,10 +33,10 @@ if (!isset($_SESSION['auth']) && isset($_COOKIE['remember'])) {
     $values = explode('---', $_COOKIE['remember']);
 
     if (count($values) === 2) {
-        $id = intval($values[0]);
+        $id = (int)$values[0];
         $token = $values[1];
 
-        // On charge notre model (petit soucis dans la fonction requireModel)
+        // On charge notre model (petit souci dans la fonction requireModel)
         requireModel('users');
 
         // On récupère l'user avec l'id
@@ -68,7 +65,7 @@ if ($route) {
     $controllerPath = realpath(APP.'/controllers/'.$route['controller'].'.php');
     require $controllerPath;
 } else {
-    // Sinon c'est que la page demandé n'existe pas
+    // Sinon c'est que la page demandée n'existe pas
     // On affiche une page d'erreur 404
     echo "404";
 }

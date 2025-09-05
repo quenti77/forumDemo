@@ -14,5 +14,5 @@ $post = sessionPost([
     'name' => ''
 ]);
 
-// On rends notre page
+// On rend notre page
 render('account/login', 'front', compact('post'));

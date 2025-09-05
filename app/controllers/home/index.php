@@ -2,7 +2,9 @@
 
 /**
  * Notre page d'accueil affichera les catégories et les forums
- * Mais on peut bien sur mettre cette partie sur une autre URL
+ * Mais on peut bien sur mettre cette partie sur une autre URL.
+ *
+ * @var PDO $db
  */
 
 requireModel('categories');
@@ -12,7 +14,7 @@ $categories = [];
 $category_id = null;
 
 foreach ($results as $result) {
-    if ($category_id != $result['category_id']) {
+    if ($category_id !== $result['category_id']) {
         $category_id = $result['category_id'];
         $categories[$category_id] = [
             'name' => $result['category_name'],
