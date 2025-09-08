@@ -98,7 +98,7 @@ if (empty($errors)) {
     // pas grave, car on en veut plus.
     $user = [
         'name' => $name,
-        'password' => password_hash($name.'#-$'.$pass, PASSWORD_BCRYPT, ['cost' => 12]),
+        'password' => password_hash($pass, PASSWORD_BCRYPT, ['cost' => 12]),
         'email' => $email,
         'emailToken' => sha1(uniqid('', true).'---'.time())
     ];
@@ -162,7 +162,7 @@ if (empty($errors)) {
     ob_start();
     try {
         $mail->send();
-    } catch (phpmailerException $exception) {
+    } catch (phpmailerException) {
         setErrors(["Erreur lors de la définition du FROM"], compact('name', 'email'));
         redirectTo('/register');
     }

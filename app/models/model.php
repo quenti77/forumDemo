@@ -9,7 +9,7 @@ $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 // On indique que les erreurs SQL seront des exceptions
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-function requireModel($model)
+function requireModel(string $model): void
 {
     require APP.'/models/'.$model.'.php';
 }

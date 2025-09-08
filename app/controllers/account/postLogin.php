@@ -40,14 +40,14 @@ if (empty($name) || empty($pass)) {
 $user = getUserByNameOrEmail($db, $name, $name);
 
 // Aucun utilisateur trouvé ou mdp incorrect
-if ($user === false || !password_verify($user['name'].'#-$'.$pass, $user['password'])) {
+if ($user === false || !password_verify($pass, $user['password'])) {
     $errors[] = 'Vos identifiants sont incorrect';
 }
 
 // Erreur 04 :
 // Cette erreur ne doit être vérifié que si il n'y a pas d'erreur avant
 if (empty($errors) && $user['email_token'] !== null) {
-    $errors[] = 'Votre compte n\'est pas actif. Merci de vérifier votre adresse mail';
+    $errors[] = "Votre compte n'est pas actif. Merci de vérifier votre adresse mail";
 }
 
 if (empty($errors)) {

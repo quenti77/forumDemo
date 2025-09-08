@@ -1,14 +1,14 @@
 <?php
 
 /**
- * Permet de récupèrer les topics
+ * Permet de récupérer les topics
  * par rapport à l'id du forum
  *
  * @param PDO $db
- * @param $idForum
+ * @param int $idForum
  * @return PDOStatement
  */
-function getTopicsByForumId(PDO $db, $idForum)
+function getTopicsByForumId(PDO $db, int $idForum): PDOStatement
 {
     $reqSelect = $db->prepare(
         'SELECT T.id AS topic_id, forum_id, T.name AS topic_name, T.description, T.reply_count,
@@ -20,20 +20,20 @@ function getTopicsByForumId(PDO $db, $idForum)
             ON U.id = T.user_id
         WHERE forum_id = :idForum');
 
-    $reqSelect->bindValue(':idForum', intval($idForum), PDO::PARAM_INT);
+    $reqSelect->bindValue(':idForum', $idForum, PDO::PARAM_INT);
     $reqSelect->execute();
 
     return $reqSelect;
 }
 
 /**
- * Permet de récupèrer les topics via les id de forums
+ * Permet de récupérer les topics via les id de forums
  *
  * @param PDO $db
- * @param $forums
+ * @param int[] $forums
  * @return PDOStatement
  */
-function getTopicsByForums(PDO $db, $forums)
+function getTopicsByForums(PDO $db, array $forums): PDOStatement
 {
     $reqSelect = $db->prepare(
         'SELECT id, forum_id, user_id, name, description, reply_count, resolved,
@@ -47,21 +47,21 @@ function getTopicsByForums(PDO $db, $forums)
 }
 
 /**
- * Permet de récupèrer les informations
+ * Permet de récupérer les informations
  * du topic par rapport à son id
  *
  * @param PDO $db
- * @param $idTopic
+ * @param int $idTopic
  * @return array|false
  */
-function getTopicById(PDO $db, $idTopic)
+function getTopicById(PDO $db, int $idTopic): false|array
 {
     $reqSelect = $db->prepare(
         'SELECT id, name, description, reply_count, resolved, locked, first_post_id, last_post_id
         FROM topics
         WHERE id = :idTopic');
 
-    $reqSelect->bindValue(':idTopic', intval($idTopic), PDO::PARAM_INT);
+    $reqSelect->bindValue(':idTopic', $idTopic, PDO::PARAM_INT);
     $reqSelect->execute();
 
     return $reqSelect->fetch();
@@ -73,16 +73,13 @@ function getTopicById(PDO $db, $idTopic)
  * @param PDO $db
  * @return int
  */
-function countTopics(PDO $db)
+function countTopics(PDO $db): int
 {
     $reqSelect = $db->prepare('SELECT COUNT(*) AS nbTopics FROM topics');
     $reqSelect->execute();
 
     $user = $reqSelect->fetch();
-    if ($user) {
-        return intval($user['nbTopics']);
-    }
-    return 0;
+    return $user ? (int)$user['nbTopics'] : 0;
 }
 
 /**
@@ -92,7 +89,7 @@ function countTopics(PDO $db)
  * @param array $topic
  * @return int
  */
-function insertTopic(PDO $db, $topic)
+function insertTopic(PDO $db, array $topic): int
 {
     $reqInsert = $db->prepare(
         'INSERT INTO topics (forum_id, user_id, name, description, reply_count, resolved, locked, first_post_id, last_post_id)
@@ -100,30 +97,30 @@ function insertTopic(PDO $db, $topic)
 
     $reqInsert->bindValue(':forumId', $topic['forumId'], PDO::PARAM_INT);
     $reqInsert->bindValue(':userId', $topic['userId'], PDO::PARAM_INT);
-    $reqInsert->bindValue(':name', $topic['name'], PDO::PARAM_STR);
-    $reqInsert->bindValue(':description', $topic['description'], PDO::PARAM_STR);
+    $reqInsert->bindValue(':name', $topic['name']);
+    $reqInsert->bindValue(':description', $topic['description']);
     $reqInsert->execute();
 
-    return intval($db->lastInsertId());
+    return (int)$db->lastInsertId();
 }
 
 /**
- * Permet de récupèrer les informations
+ * Permet de récupérer les informations
  * du topic par rapport à son id
  *
  * @param PDO $db
- * @param $idTopic
- * @param $idPost
+ * @param int $idTopic
+ * @param int $idPost
  */
-function updateTopicPost(PDO $db, $idTopic, $idPost)
+function updateTopicPost(PDO $db, int $idTopic, int $idPost): void
 {
     $reqSelect = $db->prepare(
         'UPDATE topics
         SET last_post_id = :idPost, reply_count = `reply_count` + 1
         WHERE id = :idTopic');
 
-    $reqSelect->bindValue(':idPost', intval($idPost), PDO::PARAM_INT);
-    $reqSelect->bindValue(':idTopic', intval($idTopic), PDO::PARAM_INT);
+    $reqSelect->bindValue(':idPost', $idPost, PDO::PARAM_INT);
+    $reqSelect->bindValue(':idTopic', $idTopic, PDO::PARAM_INT);
     $reqSelect->execute();
 }
 
@@ -131,18 +128,18 @@ function updateTopicPost(PDO $db, $idTopic, $idPost)
  * Change le last_post_id et le reply_count
  *
  * @param PDO $db
- * @param $idTopic
- * @param $idPost
+ * @param int $idTopic
+ * @param int $idPost
  */
-function removeTopicPost(PDO $db, $idTopic, $idPost)
+function removeTopicPost(PDO $db, int $idTopic, int $idPost): void
 {
     $reqSelect = $db->prepare(
         'UPDATE topics
         SET last_post_id = :idPost, reply_count = `reply_count` - 1
         WHERE id = :idTopic');
 
-    $reqSelect->bindValue(':idPost', intval($idPost), PDO::PARAM_INT);
-    $reqSelect->bindValue(':idTopic', intval($idTopic), PDO::PARAM_INT);
+    $reqSelect->bindValue(':idPost', $idPost, PDO::PARAM_INT);
+    $reqSelect->bindValue(':idTopic', $idTopic, PDO::PARAM_INT);
     $reqSelect->execute();
 }
 
@@ -150,30 +147,30 @@ function removeTopicPost(PDO $db, $idTopic, $idPost)
  * Suppression des topics via les forums
  *
  * @param PDO $db
- * @param $forums
+ * @param int[] $forums
  */
-function deleteTopicsByForums(PDO $db, $forums)
+function deleteTopicsByForums(PDO $db, array $forums): void
 {
     $reqDelete = $db->prepare('DELETE FROM topics WHERE forum_id IN ('.implode(',', $forums).')');
     $reqDelete->execute();
 }
 
 /**
- * Permet de récupèrer les informations
+ * Permet de récupérer les informations
  * du topic par rapport à son id
  *
  * @param PDO $db
- * @param $idTopic
- * @param $idPost
+ * @param int $idTopic
+ * @param int $idPost
  */
-function updateTopicPosts(PDO $db, $idTopic, $idPost)
+function updateTopicPosts(PDO $db, int $idTopic, int $idPost): void
 {
     $reqSelect = $db->prepare(
         'UPDATE topics
         SET first_post_id = :idPost, last_post_id = :idPost
         WHERE id = :idTopic');
 
-    $reqSelect->bindValue(':idPost', intval($idPost), PDO::PARAM_INT);
-    $reqSelect->bindValue(':idTopic', intval($idTopic), PDO::PARAM_INT);
+    $reqSelect->bindValue(':idPost', $idPost, PDO::PARAM_INT);
+    $reqSelect->bindValue(':idTopic', $idTopic, PDO::PARAM_INT);
     $reqSelect->execute();
 }
