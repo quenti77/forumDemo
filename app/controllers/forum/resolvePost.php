@@ -40,9 +40,15 @@ if ($topic === false) {
 
 $idPost = getParam('idPost');
 $post = getPostById($db, $idPost);
+if ($post === false) {
+    // Le post que l'on demande n'existe pas
+    // On redirige avec un message flash
+    setFlash('danger', "Le post n'existe pas ou plus.");
+    redirectTo('/forums/'.$forum['id'].'/topics/'.$topic['id']);
+}
 
 // On regarde si on peut modifier le post ou pas
-if ($auth['rank'] < ADMIN_RANK && $post['user_id'] !== $auth['id']) {
+if ($auth['rank'] < ADMIN_RANK && $topic['user_id'] !== $auth['id']) {
     // On n'a pas les droits
     setFlash('danger', "Vous n'êtes pas autorisé à modifier ce post");
     redirectTo("/forums/{$forum['id']}/topics/{$topic['id']}");
@@ -50,10 +56,9 @@ if ($auth['rank'] < ADMIN_RANK && $post['user_id'] !== $auth['id']) {
 
 // Vérification et update si c'est bon
 $csrf = getParam('csrf');
-$content = getParam('content');
 
 $errors = [];
-if (empty($csrf) || empty($content)) {
+if (empty($csrf)) {
     $errors[] = "Tous les champs n'ont pas été remplis";
 }
 
@@ -62,10 +67,10 @@ if (empty($_SESSION['csrf']) || (empty($errors) && $csrf !== $_SESSION['csrf']))
 }
 
 if (empty($errors)) {
-    $post['content'] = $content;
+    $post['resolved'] = $post['resolved'] === 1 ? 0 : 1;
 
-    // Sauvegarde
     updatePost($db, $post);
+    updateTopicResolution($db, $topic['id']);
 
     // Message et redirection
     setFlash('success', 'Votre message a bien été modifié');

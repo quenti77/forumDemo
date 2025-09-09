@@ -29,7 +29,7 @@ $idTopic = getParam('idTopic');
 $topic = getTopicById($db, $idTopic);
 
 if ($topic === false) {
-    // Le forum que l'on demande n'existe pas
+    // Le topic que l'on demande n'existe pas
     // On redirige avec un message flash
     setFlash('danger', "Le topic n'existe pas ou plus.");
     redirectTo('/forums/'.$forum['id']);

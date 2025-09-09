@@ -110,10 +110,11 @@ function updatePost(PDO $db, array $post): void
 {
     $reqUpdate = $db->prepare(
         'UPDATE posts
-        SET content = :content, updated_at = NOW()
+        SET content = :content, updated_at = NOW(), resolved = :resolved
         WHERE id = :postId');
 
     $reqUpdate->bindValue(':content', $post['content']);
+    $reqUpdate->bindValue(':resolved', $post['resolved'], PDO::PARAM_INT);
     $reqUpdate->bindValue(':postId', $post['post_id'], PDO::PARAM_INT);
     $reqUpdate->execute();
 }
