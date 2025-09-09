@@ -2,28 +2,28 @@
 
 /**
  * Permet de récupérer un utilisateur
- * en fonctino du nom ou du mail
+ * en fonction du nom ou du mail
  *
  * @param PDO $db
  * @param string $name
  * @param string $email
  * @return array|false
  */
-function getUserByNameOrEmail(PDO $db, $name, $email)
+function getUserByNameOrEmail(PDO $db, string $name, string $email): false|array
 {
-    // Récupération des champs pour la tables users
+    // Récupération des champs pour la table users
     // ou le nom = $name OU l'email = $email et
-    // prends en qu'un seul
+    // prend en qu'un seul
     $reqSelect = $db->prepare(
-        'SELECT id, name, password, email, email_token, register_at, connection_at, rank
+        'SELECT id, name, password, email, email_token, register_at, connection_at, `rank`
         FROM users
         WHERE name = :name OR
             email = :email
         LIMIT 0, 1');
 
     // La fonction bindValue est plus lisible et plus précise
-    $reqSelect->bindValue(':name', $name, PDO::PARAM_STR);
-    $reqSelect->bindValue(':email', $email, PDO::PARAM_STR);
+    $reqSelect->bindValue(':name', $name);
+    $reqSelect->bindValue(':email', $email);
 
     // Exécution de la requête
     $reqSelect->execute();
@@ -36,15 +36,15 @@ function getUserByNameOrEmail(PDO $db, $name, $email)
  * Permet de récupérer un utilisateur par son id
  *
  * @param PDO $db
- * @param $userId
+ * @param int $userId
  * @return array|false
  */
-function getUserById(PDO $db, $userId)
+function getUserById(PDO $db, int $userId): false|array
 {
-    // Récupération des champs pour la tables users
-    // ou l'id vaut $userId et prends en qu'un seul
+    // Récupération des champs pour la table users
+    // ou l'id vaut $userId et prend en qu'un seul
     $reqSelect = $db->prepare(
-        'SELECT id, name, password, email, email_token, register_at, connection_at, rank
+        'SELECT id, name, password, email, email_token, register_at, connection_at, `rank`
         FROM users
         WHERE id = :userId
         LIMIT 0, 1');
@@ -57,14 +57,14 @@ function getUserById(PDO $db, $userId)
 }
 
 /**
- * Compte le nombre de compte utilisateurs
- * totale ou seulement les comptes vérifiés
+ * Compte le nombre de comptes utilisateurs
+ * au total ou seulement les comptes vérifiés
  *
  * @param PDO $db
  * @param bool $onlyChecked
  * @return int
  */
-function countUsers(PDO $db, $onlyChecked)
+function countUsers(PDO $db, bool $onlyChecked): int
 {
     $sql = 'SELECT COUNT(*) AS nbUsers FROM users';
     if ($onlyChecked) {
@@ -75,10 +75,7 @@ function countUsers(PDO $db, $onlyChecked)
     $reqSelect->execute();
 
     $user = $reqSelect->fetch();
-    if ($user) {
-        return intval($user['nbUsers']);
-    }
-    return 0;
+    return $user ? $user['nbUsers'] : 0;
 }
 
 /**
@@ -88,19 +85,19 @@ function countUsers(PDO $db, $onlyChecked)
  * @param array $user
  * @return int L'id de l'utilisateur enregistré
  */
-function registerUser(PDO $db, $user)
+function registerUser(PDO $db, array $user): int
 {
     $reqInsert = $db->prepare(
-        'INSERT INTO users (name, password, email, email_token, register_at, connection_at, rank) 
+        'INSERT INTO users (name, password, email, email_token, register_at, connection_at, `rank`) 
         VALUES (:name, :password, :email, :emailToken, NOW(), NULL, 1)');
 
-    $reqInsert->bindValue(':name', $user['name'], PDO::PARAM_STR);
-    $reqInsert->bindValue(':password', $user['password'], PDO::PARAM_STR);
-    $reqInsert->bindValue(':email', $user['email'], PDO::PARAM_STR);
-    $reqInsert->bindValue(':emailToken', $user['emailToken'], PDO::PARAM_STR);
+    $reqInsert->bindValue(':name', $user['name']);
+    $reqInsert->bindValue(':password', $user['password']);
+    $reqInsert->bindValue(':email', $user['email']);
+    $reqInsert->bindValue(':emailToken', $user['emailToken']);
     $reqInsert->execute();
 
-    return intval($db->lastInsertId());
+    return (int)$db->lastInsertId();
 }
 
 /**
@@ -108,8 +105,9 @@ function registerUser(PDO $db, $user)
  *
  * @param PDO $db
  * @param array $user
+ * @return void
  */
-function updateUser(PDO $db, $user)
+function updateUser(PDO $db, array $user): void
 {
     $reqUpdate = $db->prepare(
         'UPDATE users
@@ -117,14 +115,14 @@ function updateUser(PDO $db, $user)
             email = :email,
             email_token = :email_token,
             connection_at = :connection_at,
-            rank = :rank
+            `rank` = :rank
         WHERE id = :userId');
 
-    $reqUpdate->bindValue(':name', $user['name'], PDO::PARAM_STR);
-    $reqUpdate->bindValue(':email', $user['email'], PDO::PARAM_STR);
-    $reqUpdate->bindValue(':email_token', $user['email_token'], PDO::PARAM_STR);
-    $reqUpdate->bindValue(':connection_at', $user['connection_at'], PDO::PARAM_STR);
-    $reqUpdate->bindValue(':rank', $user['rank'], PDO::PARAM_STR);
+    $reqUpdate->bindValue(':name', $user['name']);
+    $reqUpdate->bindValue(':email', $user['email']);
+    $reqUpdate->bindValue(':email_token', $user['email_token']);
+    $reqUpdate->bindValue(':connection_at', $user['connection_at']);
+    $reqUpdate->bindValue(':rank', $user['rank']);
     $reqUpdate->bindValue(':userId', $user['id'], PDO::PARAM_INT);
     $reqUpdate->execute();
 }

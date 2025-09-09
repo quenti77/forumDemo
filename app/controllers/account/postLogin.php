@@ -2,6 +2,8 @@
 
 /**
  * Vérification du formulaire de connexion
+ *
+ * @var PDO $db
  */
 
 if (isset($_SESSION['auth'])) {
@@ -21,31 +23,31 @@ $remember = getParam('remember');
 $errors = [];
 
 /**
- * Quelles sont nos erreurs possible :
- *  01 L'un des champs obligatoire n'est pas remplie
- *  02 L'utilisateur n'existe pas
- *  03 Le mot de passe n'est pas bon
- *  04 Le compte n'est pas activé
+ * Quelles sont nos erreurs possibles :
+ *  01 L'un des champs obligatoires n'est pas remplie ?
+ *  02 L'utilisateur n'existe pas ?
+ *  03 Le mot de passe n'est pas bon ?
+ *  04 Le compte n'est pas activé ?
  */
 
-// Erreur 01:
+// Erreur 01 :
 if (empty($name) || empty($pass)) {
     $errors[] = 'Tous les champs doivent être remplis';
 }
 
-// Erreur 02 et 03:
+// Erreur 02 et 03 :
 // Notre champs name est pour le pseudo ou le mail
 $user = getUserByNameOrEmail($db, $name, $name);
 
 // Aucun utilisateur trouvé ou mdp incorrect
-if ($user === false || !password_verify($user['name'].'#-$'.$pass, $user['password'])) {
+if ($user === false || !password_verify($pass, $user['password'])) {
     $errors[] = 'Vos identifiants sont incorrect';
 }
 
-// Errreur 04:
+// Erreur 04 :
 // Cette erreur ne doit être vérifié que si il n'y a pas d'erreur avant
-if (empty($errors) && $user['email_token'] != null) {
-    $errors[] = 'Votre compte n\'est pas actif. Merci de vérifier votre adresse mail';
+if (empty($errors) && $user['email_token'] !== null) {
+    $errors[] = "Votre compte n'est pas actif. Merci de vérifier votre adresse mail";
 }
 
 if (empty($errors)) {
@@ -67,7 +69,7 @@ if (empty($errors)) {
     unset($user['password']);
 
     // Et on doit y update la date de connexion
-    $connectedAt = (new DateTime())->format('Y-m-d H:i:s');
+    $connectedAt = new DateTime()->format('Y-m-d H:i:s');
     $user['connection_at'] = $connectedAt;
     updateUser($db, $user);
 

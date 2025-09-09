@@ -2,12 +2,11 @@
 
 /**
  * Accueil de l'administration
+ *
+ * @var PDO $db
  */
 
-if (!isset($_SESSION['auth']) || $_SESSION['auth']['rank'] < 3) {
-    setFlash('danger', 'Vous devez être administrateur pour venir');
-    redirectTo('/');
-}
+adminMiddleware();
 
 // On récupère nos informations
 requireModel('users');

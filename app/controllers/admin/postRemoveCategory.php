@@ -2,12 +2,11 @@
 
 /**
  * Ajout d'une catégorie
+ *
+ * @var PDO $db
  */
 
-if (!isset($_SESSION['auth']) || $_SESSION['auth']['rank'] < 3) {
-    setFlash('danger', 'Vous devez être administrateur pour venir');
-    redirectTo('/');
-}
+adminMiddleware();
 
 requireModel('categories');
 requireModel('forums');
@@ -23,35 +22,35 @@ if ($category === false) {
 }
 
 $csrf = getParam('csrf');
-$csrfSession = isset($_SESSION['csrf']) ? $_SESSION['csrf'] : '';
+$csrfSession = $_SESSION['csrf'] ?? '';
 
-if ($csrf != $csrfSession) {
+if ($csrf !== $csrfSession) {
     setFlash('danger', 'Token invalide. Merci de régénérer un nouveau token');
     redirectTo('/admin/forums');
 }
 
-// Récupération de tous les ids des forums lié au catégories
+// Récupération de tous les ids des forums liés aux catégories
 $result = getForumsByCategory($db, $idCategory);
 $forums = [];
 
 foreach ($result as $forum) {
-    $forums[] = intval($forum['id']);
+    $forums[] = (int)$forum['id'];
 }
 
 if (!empty($forums)) {
-    // Récupération de tous les ids des topics lié aux forums
+    // Récupération de tous les ids des topics liés aux forums
     $result = getTopicsByForums($db, $forums);
     $topics = [];
 
     foreach ($result as $topic) {
-        $topics[] = intval($topic['id']);
+        $topics[] = (int)$topic['id'];
     }
 
     if (!empty($topics)) {
-        // Suppression des posts lié au topics
+        // Suppression des posts liés au topics
         deletePostsByTopics($db, $topics);
 
-        // Suppression des topics lié au forums
+        // Suppression des topics lié aux forums
         deleteTopicsByForums($db, $forums);
     }
 

@@ -34,12 +34,13 @@ function trimUrl($url)
 }
 
 /**
- * Redirige vers l'url demandé avec les bon headers
+ * Redirige vers l'URL demandé avec les bons headers
  *
  * @param string $url
  * @param int $code
+ * @return never
  */
-function redirectTo($url, $code = 301)
+function redirectTo($url, $code = 301): never
 {
     // On récupère nos code de redirections possible
     global $redirections;
@@ -138,23 +139,23 @@ function urlMatch($urlCheck, $urlTarget)
 }
 
 /**
- * On regarde nos routes pour voir si ça match nos url
- * et on retourne le tableau de l'url qui a match ou false sinon
+ * On regarde nos routes pour voir si ça match nos URL
+ * et on retourne le tableau de l'URL qui a match ou false sinon.
  *
  * @param string $method
  * @param string $url
- * @return bool
+ * @return array|false
  */
-function run($method, $url)
+function run(string $method, string $url): array|false
 {
     // On récupère nos routes
     global $routes;
 
-    // On trim l'url demandé
+    // On trim l'URL demandé
     $url = trimUrl($url);
 
-    // Si la méthode utilisé (GET, POST, ...) n'a aucune route
-    // ça sert à rien de continuer
+    // Si la méthode utilisée (GET, POST, ...) n'a aucune route
+    // ça ne sert à rien de continuer.
     if (!isset($routes[$method])) {
         return false;
     }

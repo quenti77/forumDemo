@@ -7,14 +7,14 @@
         <!-- Le pseudo -->
         <div class="form-group">
             <label for="name">Votre pseudo ou adresse mail :</label>
-            <input type="text" class="form-control input-sm" name="name"
+            <input type="text" class="form-control input-sm" name="name" id="name"
                    placeholder="Votre pseudo ou votre adresse mail ..." value="<?= $post['name'] ?>">
         </div>
 
         <!-- Le mot de passe -->
         <div class="form-group">
             <label for="pass">Votre mot de passe :</label>
-            <input type="password" class="form-control input-sm" name="pass"
+            <input type="password" class="form-control input-sm" name="pass" id="pass"
                    placeholder="Entrez votre mot de passe ...">
         </div>
 

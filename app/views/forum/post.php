@@ -24,7 +24,7 @@
             </thead>
             <tbody>
             <?php foreach ($posts as $post): ?>
-                <tr>
+                <tr class="<?= $post['resolved'] ? 'bg-success' : '' ?>">
                     <td class="text-center">
                         <div>
                             <a href="/">

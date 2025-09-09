@@ -2,15 +2,17 @@
 
 /**
  * Affichage de la liste des topics du forum
+ *
+ * @var PDO $db
  */
 
 /**
  * On déclare une fonction pour la vue
  *
- * @param $topic
+ * @param array $topic
  * @return string
  */
-function getStatus($topic)
+function getStatus(array $topic): string
 {
     if ($topic['locked']) { return '<i class="text-danger fa fa-lock fa-2x"></i>'; }
     if ($topic['resolved']) { return '<i class="text-success fa fa-check fa-2x"></i>'; }
@@ -28,7 +30,7 @@ $forum = getForumById($db, $idForum);
 if ($forum === false) {
     // Le forum que l'on demande n'existe pas
     // On redirige avec un message flash
-    setFlash('danger', 'Le forum n\'existe pas ou plus.');
+    setFlash('danger', "Le forum n'existe pas ou plus.");
     redirectTo('/');
 }
 

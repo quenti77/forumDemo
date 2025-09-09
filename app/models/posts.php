@@ -1,14 +1,14 @@
 <?php
 
 /**
- * Permet de récupèrer les posts
+ * Permet de récupérer les posts
  * par rapport à l'id du topic
  *
  * @param PDO $db
- * @param $idTopic
+ * @param int $idTopic
  * @return PDOStatement
  */
-function getPostsByTopicId(PDO $db, $idTopic)
+function getPostsByTopicId(PDO $db, int $idTopic): PDOStatement
 {
     $reqSelect = $db->prepare(
         'SELECT P.id AS post_id, P.content, P.posted_at, P.updated_at, P.resolved,
@@ -19,7 +19,7 @@ function getPostsByTopicId(PDO $db, $idTopic)
             ON U.id = P.user_id
         WHERE P.topic_id = :idTopic');
 
-    $reqSelect->bindValue(':idTopic', intval($idTopic), PDO::PARAM_INT);
+    $reqSelect->bindValue(':idTopic', $idTopic, PDO::PARAM_INT);
     $reqSelect->execute();
 
     return $reqSelect;
@@ -29,10 +29,10 @@ function getPostsByTopicId(PDO $db, $idTopic)
  * Permet de récupérer un post via son id
  *
  * @param PDO $db
- * @param $idPost
+ * @param int $idPost
  * @return array|false
  */
-function getPostById(PDO $db, $idPost)
+function getPostById(PDO $db, int $idPost): false|array
 {
     $reqSelect = $db->prepare(
         'SELECT P.id AS post_id, P.content, P.posted_at, P.updated_at, P.resolved,
@@ -43,13 +43,13 @@ function getPostById(PDO $db, $idPost)
             ON U.id = P.user_id
         WHERE P.id = :idPost');
 
-    $reqSelect->bindValue(':idPost', intval($idPost), PDO::PARAM_INT);
+    $reqSelect->bindValue(':idPost', $idPost, PDO::PARAM_INT);
     $reqSelect->execute();
 
     return $reqSelect->fetch();
 }
 
-function findLastPostTopic(PDO $db, $idTopic)
+function findLastPostTopic(PDO $db, int $idTopic): false|array
 {
     $reqSelect = $db->prepare(
         'SELECT id, topic_id, user_id, content, posted_at, updated_at, resolved
@@ -69,16 +69,13 @@ function findLastPostTopic(PDO $db, $idTopic)
  * @param PDO $db
  * @return int
  */
-function countPosts(PDO $db)
+function countPosts(PDO $db): int
 {
     $reqSelect = $db->prepare('SELECT COUNT(*) AS nbPosts FROM posts');
     $reqSelect->execute();
 
     $user = $reqSelect->fetch();
-    if ($user) {
-        return intval($user['nbPosts']);
-    }
-    return 0;
+    return $user ? (int)$user['nbPosts'] : 0;
 }
 
 /**
@@ -88,7 +85,7 @@ function countPosts(PDO $db)
  * @param array $post
  * @return int
  */
-function insertPost(PDO $db, $post)
+function insertPost(PDO $db, array $post): int
 {
     $reqInsert = $db->prepare(
         'INSERT INTO posts (topic_id, user_id, content, posted_at, updated_at, resolved) 
@@ -96,10 +93,10 @@ function insertPost(PDO $db, $post)
 
     $reqInsert->bindValue(':topicId', $post['topicId'], PDO::PARAM_INT);
     $reqInsert->bindValue(':userId', $post['userId'], PDO::PARAM_INT);
-    $reqInsert->bindValue(':content', $post['content'], PDO::PARAM_STR);
+    $reqInsert->bindValue(':content', $post['content']);
     $reqInsert->execute();
 
-    return intval($db->lastInsertId());
+    return (int)$db->lastInsertId();
 }
 
 /**
@@ -107,15 +104,16 @@ function insertPost(PDO $db, $post)
  *
  * @param PDO $db
  * @param array $post
+ * @return void
  */
-function updatePost(PDO $db, $post)
+function updatePost(PDO $db, array $post): void
 {
     $reqUpdate = $db->prepare(
         'UPDATE posts
         SET content = :content, updated_at = NOW()
         WHERE id = :postId');
 
-    $reqUpdate->bindValue(':content', $post['content'], PDO::PARAM_STR);
+    $reqUpdate->bindValue(':content', $post['content']);
     $reqUpdate->bindValue(':postId', $post['post_id'], PDO::PARAM_INT);
     $reqUpdate->execute();
 }
@@ -125,8 +123,9 @@ function updatePost(PDO $db, $post)
  *
  * @param PDO $db
  * @param int $postId
+ * @return void
  */
-function removePost(PDO $db, $postId)
+function removePost(PDO $db, int $postId): void
 {
     $reqDelete = $db->prepare('DELETE FROM posts WHERE id = :postId');
     $reqDelete->bindValue(':postId', $postId, PDO::PARAM_INT);
@@ -137,19 +136,20 @@ function removePost(PDO $db, $postId)
  * Suppression des posts via les topics
  *
  * @param PDO $db
- * @param $topics
+ * @param int[] $topics
+ * @return void
  */
-function deletePostsByTopics(PDO $db, $topics)
+function deletePostsByTopics(PDO $db, array $topics): void
 {
     $reqDelete = $db->prepare('DELETE FROM posts WHERE topic_id IN ('.implode(',', $topics).')');
     $reqDelete->execute();
 }
 
 /**
- * @param $post
+ * @param array $post
  * @return DateTime
  */
-function postedAt($post)
+function postedAt(array $post): DateTime
 {
     if ($post['updated_at']) {
         return DateTime::createFromFormat('Y-m-d H:i:s', $post['updated_at']);

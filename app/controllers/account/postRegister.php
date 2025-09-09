@@ -2,6 +2,8 @@
 
 /**
  * Vérification du formulaire pour l'inscription
+ *
+ * @var PDO $db
  */
 
 if (isset($_SESSION['auth'])) {
@@ -24,60 +26,60 @@ $errors = [];
 
 /**
  * Quelles sont les erreurs possibles :
- *  01 L'un des champs obligatoire n'est pas remplie
- *  02 Le pseudo n'est pas une chaine compris
- *    entre 3 et 50 caractères
- *  03 Le mail n'est pas dans un format valide
- *  04 Le mot de passe fait moins de 8 caractères
- *  05 Les mots de passe ne sont pas identiques
- *  06 Le pseudo ou le mail existe déjà en BDD
+ *  01 L'un des champs obligatoires n'est pas remplie ?
+ *  02 Le pseudo n'est pas une chaine comprise
+ *    entre 3 et 50 caractères ?
+ *  03 Le mail n'est pas dans un format valide ?
+ *  04 Le mot de passe fait moins de 8 caractères ?
+ *  05 Les mots de passe ne sont pas identiques ?
+ *  06 Le pseudo ou le mail existe déjà en BDD ?
  */
 
-// Erreur 01:
+// Erreur 01 :
 if (empty($name) || empty($email) ||
     empty($pass) || empty($pass_confirm)) {
 
-    // Si l'un des champs obligatoire est vide
-    // c'est qu'il est pas remplie
+    // Si l'un des champs obligatoires est vide,
+    // c'est qu'il n'est pas remplie
     $errors[] = 'Tous les champs doivent être remplis';
 }
 
-// Erreur 02:
-// Meusure de la taille de la chaine
+// Erreur 02 :
+// Mesure de la taille de la chaine
 $nameLength = strlen($name);
 
 if ($nameLength < 3 || $nameLength > 50) {
-    // Ce n'est pas bon car soit en dessous de 3 soit au dessus de 50
+    // Ce n'est pas bon, car soit en dessous de 3 soit au-dessus de 50.
     $errors[] = 'Votre pseudo doit être compris entre 3 et 50 caractères';
 }
 
-// Erreur 03:
+// Erreur 03 :
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     // Explication de la fonction
     $errors[] = 'Votre email est dans un format invalide';
 }
 
-// Erreur 04:
+// Erreur 04 :
 $passLength = strlen($pass);
 
-// On ne vérifie que sur le premier mot de passe car
-// on test après si les valeurs sont identiques
+// On ne vérifie que sur le premier mot de passe, car
+// nous testons après si les valeurs sont identiques
 if ($passLength < 8) {
     $errors[] = 'Votre mot de passe n\'est pas assez long (8 caractères minimum)';
 }
 
-// Erreur 05:
-if ($pass != $pass_confirm) {
+// Erreur 05 :
+if ($pass !== $pass_confirm) {
     $errors[] = 'Vos mots de passe ne sont pas identique';
 }
 
-// Erreur 06:
-// Pour vérifier que un utilisateur existe ou pas
+// Erreur 06 :
+// Pour vérifier qu'un utilisateur existe ou pas
 // le plus simple est de le chercher et si on trouve
-// un résultat c'est pas bon car c'est qu'il existe déjà
+// un résultat, ce n'est pas bon, car c'est qu'il existe déjà
 $user = getUserByNameOrEmail($db, $name, $email);
 
-// le fetch dans la fonction retourne soit false soit un tableau
+// le fetch dans la fonction retourne soit false, soit un tableau
 // donc on peut détecter si un utilisateur est pris ou non
 if ($user) {
     // Explication de la syntaxe et ajout de l'erreur
@@ -89,23 +91,23 @@ if ($user) {
 if (empty($errors)) {
     // Aucune erreur
 
-    // On mets dans un tableau les données que l'on veut inscrire
+    // On met dans un tableau les données que l'on veut inscrire.
     // Il s'agit donc d'une représentation.
 
-    // On remplace notre variable user d'avant mais c'est
-    // pas grave car on en veut plus
+    // On remplace notre variable user d'avant mais, ce n'est
+    // pas grave, car on en veut plus.
     $user = [
         'name' => $name,
-        'password' => password_hash($name.'#-$'.$pass, PASSWORD_BCRYPT, ['cost' => 12]),
+        'password' => password_hash($pass, PASSWORD_BCRYPT, ['cost' => 12]),
         'email' => $email,
-        'emailToken' => sha1(uniqid().'---'.time())
+        'emailToken' => sha1(uniqid('', true).'---'.time())
     ];
 
     // On enregistre notre utilisateur
-    // On on y sauvegarde l'id
+    // On y sauvegarde l'id
     $user['id'] = registerUser($db, $user);
 
-    // Utilisation de PHPMailer pour l'envoie du mail
+    // Utilisation de PHPMailer pour l'envoi du mail
     $mail = new PHPMailer();
 
     // On active la visibilité des erreurs SMTP
@@ -123,37 +125,47 @@ if (empty($errors)) {
     // On indique que l'on veut envoyer le mail via du SMTP
     $mail->isSMTP();
 
-    // On indique notre serveur SMTP (local avec maildev)
-    $mail->Host = 'local.forum';
+    // On indique notre serveur SMTP (local avec mailpit)
+    $mail->Host = '127.0.0.1';
     $mail->Port = 1025;
     $mail->SMTPAuth = false;
 
     // From
-    $mail->setFrom('admin@local.forum', 'Admin du site');
+    try {
+        $mail->setFrom('admin@local.forum', 'Admin du site');
+    } catch (phpmailerException) {
+        setErrors(["Erreur lors de la définition du FROM"], compact('name', 'email'));
+        redirectTo('/register');
+    }
 
     // To
     $mail->addAddress($email, explode('@', $email)[0]);
 
-    // On défini notre mail en HTML
+    // On définit notre mail en HTML
     $mail->isHTML(true);
 
     // Subject
     $mail->Subject = 'Vérification de votre adresse mail - MonSuperForum';
 
-    // On va faire le rendu de notre mail mais on va
-    // le stoquer pour le mettre dans le mail
+    // On va faire le rendu de notre mail, mais on ne
+    // va pas l'afficher. On va directement mettre le contenu dans le mail.
     ob_start();
     render('mails/verify.html', null, compact('user'));
     $mail->Body = ob_get_clean();
 
-    // On y mets la version sans html pour le mail texte
+    // On y met la version sans html pour le mail texte
     ob_start();
     render('mails/verify.text', null, compact('user'));
     $mail->AltBody = ob_get_clean();
 
     // On envoie le mail
     ob_start();
-    $mail->send();
+    try {
+        $mail->send();
+    } catch (phpmailerException) {
+        setErrors(["Erreur lors de la définition du FROM"], compact('name', 'email'));
+        redirectTo('/register');
+    }
     ob_end_clean();
 
     // On redirige vers la page d'accueil

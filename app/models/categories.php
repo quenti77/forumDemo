@@ -7,7 +7,7 @@
  * @param PDO $db
  * @return PDOStatement
  */
-function getCategoriesAndForums(PDO $db)
+function getCategoriesAndForums(PDO $db): PDOStatement
 {
     $reqSelect = $db->prepare(
         'SELECT C.id AS category_id, C.name AS category_name, C.sorted,
@@ -34,7 +34,7 @@ function getCategoriesAndForums(PDO $db)
  * @param PDO $db
  * @return PDOStatement
  */
-function getCategories(PDO $db)
+function getCategories(PDO $db): PDOStatement
 {
     $reqSelect = $db->prepare('SELECT id, name, sorted FROM categories ORDER BY sorted DESC');
     $reqSelect->execute();
@@ -47,7 +47,7 @@ function getCategories(PDO $db)
  * @param int $idCategory
  * @return array|false
  */
-function getCategory(PDO $db, $idCategory)
+function getCategory(PDO $db, int $idCategory): false|array
 {
     $reqSelect = $db->prepare('SELECT id, name, sorted FROM categories WHERE id = :idCategory');
     $reqSelect->bindValue(':idCategory', $idCategory, PDO::PARAM_INT);
@@ -63,7 +63,7 @@ function getCategory(PDO $db, $idCategory)
  * @param string $name
  * @param int $order
  */
-function insertCategory(PDO $db, $name, $order)
+function insertCategory(PDO $db, string $name, int $order): PDOStatement
 {
     $reqInsert = $db->prepare('INSERT INTO categories (name, sorted) VALUES (:name, :order)');
     $reqInsert->bindValue(':name', $name, PDO::PARAM_STR);
@@ -79,7 +79,7 @@ function insertCategory(PDO $db, $name, $order)
  * @param string $name
  * @param int $order
  */
-function updateCategory(PDO $db, $idCategory, $name, $order)
+function updateCategory(PDO $db, int $idCategory, string $name, int $order): void
 {
     $reqInsert = $db->prepare('UPDATE categories SET name = :name, sorted = :order WHERE id = :idCategory');
     $reqInsert->bindValue(':name', $name, PDO::PARAM_STR);
@@ -92,9 +92,9 @@ function updateCategory(PDO $db, $idCategory, $name, $order)
  * Suppression de la catégorie
  *
  * @param PDO $db
- * @param $categoryId
+ * @param int $categoryId
  */
-function deleteCategory(PDO $db, $categoryId)
+function deleteCategory(PDO $db, int $categoryId): void
 {
     $reqDelete = $db->prepare('DELETE FROM categories WHERE id = :categoryId');
     $reqDelete->bindValue(':categoryId', $categoryId, PDO::PARAM_INT);

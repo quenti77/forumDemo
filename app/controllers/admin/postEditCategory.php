@@ -2,12 +2,11 @@
 
 /**
  * Ajout d'une catégorie
+ *
+ * @var PDO $db
  */
 
-if (!isset($_SESSION['auth']) || $_SESSION['auth']['rank'] < 3) {
-    setFlash('danger', 'Vous devez être administrateur pour venir');
-    redirectTo('/');
-}
+adminMiddleware();
 
 requireModel('categories');
 
@@ -20,20 +19,20 @@ if ($category === false) {
 }
 
 $csrf = getParam('csrf');
-$csrfSession = isset($_SESSION['csrf']) ? $_SESSION['csrf'] : '';
+$csrfSession = $_SESSION['csrf'] ?? '';
 
-if ($csrf != $csrfSession) {
+if ($csrf !== $csrfSession) {
     setFlash('danger', 'Token invalide. Merci de régénérer un nouveau token');
     redirectTo('/admin/forums');
 }
 
 $name = getParam('name');
 if (empty($name)) {
-    setFlash('danger', 'Vous n\'avez pas remplie le nom de la nouvelle catégorie');
+    setFlash('danger', "Vous n'avez pas remplie le nom de la nouvelle catégorie");
     redirectTo('/admin/forums');
 }
 
-$order = intval(getParam('order'));
+$order = (int)getParam('order');
 
 updateCategory($db, $idCategory, $name, $order);
 

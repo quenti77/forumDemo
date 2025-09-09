@@ -1,8 +1,8 @@
 # Utilisateur de test
-INSERT INTO users (name, password, email, email_token, register_at, connection_at, rank) VALUES
-    ('admin', '$2y$12$NZpQdPRMISGpUwPyZGT7JeEGlndr1p3TlH7wERDJ9A01AEDNLn5iq',
+INSERT INTO users (name, password, email, email_token, register_at, connection_at, `rank`) VALUES
+    ('admin', '$2y$14$siQ.Ep0R4tHrC6doT8RCKOuLpydrwv/M8ZfOdjwHz2omUGgPkrENK', -- admin
         'admin@local.forum', NULL, NOW(), NULL, 3),
-    ('test', '$2y$12$KO4j7Ezi3HXq/IM3fpjtAegw4w23/U4fFskZS5.du/nWhgIqYtP2W',
+    ('test', '$2y$14$yESlWDEHdwwsBg07ZmdXIuGOZwFPCyM.qRjd7xANihneHDRUwIxhW', -- test
         'test@local.forum', NULL, NOW(), NULL, 1);
 
 # Catégories

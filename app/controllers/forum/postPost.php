@@ -2,14 +2,11 @@
 
 /**
  * Vérification de l'ajout d'une réponse au topic
+ *
+ * @var PDO $db
  */
 
-// On vérifie que ce dernier est connecté
-if (!isset($_SESSION['auth'])) {
-    // Sinon on le redirige vers la page de connexion
-    setFlash('warning', 'Vous devez être connecté pour poster un message');
-    redirectTo('/login');
-}
+userMiddleware();
 
 // On charge nos modèles
 requireModel('forums');
@@ -23,7 +20,7 @@ $forum = getForumById($db, $idForum);
 if ($forum === false) {
     // Le forum que l'on demande n'existe pas
     // On redirige avec un message flash
-    setFlash('danger', 'Le forum n\'existe pas ou plus.');
+    setFlash('danger', "Le forum n'existe pas ou plus.");
     redirectTo('/');
 }
 
@@ -34,7 +31,7 @@ $topic = getTopicById($db, $idTopic);
 if ($topic === false) {
     // Le forum que l'on demande n'existe pas
     // On redirige avec un message flash
-    setFlash('danger', 'Le topic n\'existe pas ou plus.');
+    setFlash('danger', "Le topic n'existe pas ou plus.");
     redirectTo('/forums/'.$forum['id']);
 }
 
@@ -50,15 +47,15 @@ if (empty($content) || empty($csrf)) {
 }
 
 // Vérification du token
-$csrfSession = (isset($_SESSION['csrf'])) ? $_SESSION['csrf'] : '';
-if ($csrf != $csrfSession) {
+$csrfSession = $_SESSION['csrf'] ?? '';
+if ($csrf !== $csrfSession) {
     $errors[] = 'Le formulaire à expiré';
 }
 
 // Si c'est bon
 if (empty($errors)) {
     // On peut ajouter le message et
-    // mettre à jours les informations des autres tables
+    // mettre à jour les informations des autres tables
 
     // Insertion du post
     $post = [
@@ -73,7 +70,7 @@ if (empty($errors)) {
     updateForumPost($db, $forum['id'], $post['id']);
 
     // Message flash
-    setFlash('success', 'Votre réponse a été envoyé avec succes');
+    setFlash('success', 'Votre réponse a été envoyé avec succès');
 
 } else {
     // Sinon on redirige avec une erreur

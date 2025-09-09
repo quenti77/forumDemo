@@ -1,26 +1,15 @@
 <?php
 
-// Connexion à la base de donnée
-try {
-    $db = new PDO('mysql:host=localhost;dbname=tuto;charset=utf8', 'tuto', 'tuto');
+// Connexion à la base de donnée (ne pas oublier de changer les informations de connexion)
+$db = new PDO('mysql:host=127.0.0.1;dbname=forum_demo;charset=utf8;port=3316', 'forum_demo', 'forum_demo');
 
-    // On défini tous les résultats sous forme d'un tableau associatif
-    $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+// On défini tous les résultats sous forme d'un tableau associatif
+$db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 
-    // On indique que les erreurs SQL seront des exceptions
-    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+// On indique que les erreurs SQL seront des exceptions
+$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-} catch (PDOException $e) {
-    // S'il y a eu un problème
-
-    // On affiche le message
-    var_dump($e->getMessage());
-
-    // On termine le script ici
-    exit;
-}
-
-function requireModel($model)
+function requireModel(string $model): void
 {
     require APP.'/models/'.$model.'.php';
 }
