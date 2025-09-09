@@ -57,7 +57,7 @@ function getTopicsByForums(PDO $db, array $forums): PDOStatement
 function getTopicById(PDO $db, int $idTopic): false|array
 {
     $reqSelect = $db->prepare(
-        'SELECT id, name, description, reply_count, resolved, locked, first_post_id, last_post_id
+        'SELECT id, user_id, name, description, reply_count, resolved, locked, first_post_id, last_post_id
         FROM topics
         WHERE id = :idTopic');
 
@@ -153,6 +153,26 @@ function deleteTopicsByForums(PDO $db, array $forums): void
 {
     $reqDelete = $db->prepare('DELETE FROM topics WHERE forum_id IN ('.implode(',', $forums).')');
     $reqDelete->execute();
+}
+
+/**
+ * Count all post marked as resolved and set topic to resolved if it's greater than 0
+ *
+ * @param PDO $db
+ * @param int $topicId
+ * @return void
+ */
+function updateTopicResolution(PDO $db, int $topicId): void
+{
+    $countReq = $db->prepare('SELECT COUNT(*) as nb FROM posts AS p WHERE p.topic_id = :topicId AND p.resolved = 1');
+    $countReq->execute([':topicId' => $topicId]);
+    $resolved = ($countReq->fetch()['nb'] ?? 0) > 0;
+
+    $updateReq = $db->prepare('UPDATE topics AS t SET t.resolved = :resolved WHERE t.id = :topicId');
+    $updateReq->execute([
+        ':resolved' => $resolved ? 1 : 0,
+        ':topicId' => $topicId,
+    ]);
 }
 
 /**

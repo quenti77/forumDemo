@@ -32,7 +32,7 @@ $idTopic = getParam('idTopic');
 $topic = getTopicById($db, $idTopic);
 
 if ($topic === false) {
-    // Le forum que l'on demande n'existe pas
+    // Le topic que l'on demande n'existe pas
     // On redirige avec un message flash
     setFlash('danger', "Le topic n'existe pas ou plus.");
     redirectTo('/forums/'.$forum['id']);
@@ -43,7 +43,7 @@ $post = getPostById($db, $idPost);
 
 // On regarde si on peut modifier le post ou pas
 if ($auth['rank'] < ADMIN_RANK && $post['user_id'] !== $auth['id']) {
-    // On a pas les droits
+    // On n'a pas les droits
     setFlash('danger', 'Vous n\'êtes pas autorisé à modifier ce post');
 
     // Première fois que l'on mets les variables directement

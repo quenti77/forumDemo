@@ -37,7 +37,7 @@ $idTopic = getParam('idTopic');
 $topic = getTopicById($db, $idTopic);
 
 if ($topic === false) {
-    // Le forum que l'on demande n'existe pas
+    // Le topic que l'on demande n'existe pas
     // On redirige avec un message flash
     setFlash('danger', "Le topic n'existe pas ou plus.");
     redirectTo('/forums/'.$forum['id']);
@@ -48,7 +48,7 @@ $post = getPostById($db, $idPost);
 
 // On regarde si on peut modifier le post ou pas
 if ($auth['rank'] < ADMIN_RANK && $post['user_id'] !== $auth['id']) {
-    // On a pas les droits
+    // On n'a pas les droits
     setFlash('danger', 'Vous n\'êtes pas autorisé à supprimer ce post');
     redirectTo("/forums/{$forum['id']}/topics/{$topic['id']}");
 }
@@ -76,6 +76,8 @@ if ($post['post_id'] === $topic['last_post_id']) {
 
 removeTopicPost($db, $topic['id'], $newLastPost['id']);
 removeForumPost($db, $forum['id'], $newLastPost['id']);
+
+updateTopicResolution($db, $topic['id']);
 
 setFlash('success', 'Votre message a bien été supprimé');
 redirectTo("/forums/{$forum['id']}/topics/{$topic['id']}");
