@@ -2,7 +2,7 @@
 // On démarre la session directement
 session_start();
 
-// On garde certains chemin pour plus de compréhension
+// On garde certains chemins pour plus de compréhension
 define('ROOT', dirname(__DIR__) . '/');
 define('APP', realpath(ROOT.'/app'));
 
@@ -25,8 +25,8 @@ require APP.'/routes/account.php';
 require APP.'/routes/forum.php';
 require APP.'/routes/admin.php';
 
-// Sur toute les pages on veut pouvoir reconnecter la personne
-// si le cookie existe mais que la session n'existe plus
+// Sur toutes les pages, on veut pouvoir reconnecter la personne
+// si le cookie existe, mais que la session n'existe plus.
 if (!isset($_SESSION['auth']) && isset($_COOKIE['remember'])) {
 
     // On récupère nos valeurs
@@ -66,6 +66,6 @@ if ($route) {
     require $controllerPath;
 } else {
     // Sinon c'est que la page demandée n'existe pas
-    // On affiche une page d'erreur 404
+    // On affiche une page d'erreur 404.
     echo "404";
 }
