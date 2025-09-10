@@ -1,26 +1,15 @@
-Chapitre 1: Configuration de l'environnement
+## Chapitre 1 : Configuration de l'environnement
 
-Création du dossier du projet: "G:\web\php\forum"
-Création du virtualhost dans le dossier alias de wamp:
---------------------------------------------------
-<VirtualHost local.forum:80>
+Voici ce qu'il vous faut pour pouvoir lancer le projet :
+- Avoir `PHP` version 8.4 d'installé
+- Avoir `composer` d'installer pour la partie POO
+- Avoir une DB `MySQL` accessible
+  - Si vous préférez passer par `Docker`, c'est possible.
 
-  ServerAdmin admin@local.forum
-  ServerName local.forum
-  ServerAlias local.forum
+Pour aller au plus simple, le mieux reste de lancer le serveur interne de PHP :
+```bash
+# Depuis la racine du projet
+php -S localhost:8000 -t ./public
+```
 
-  DocumentRoot "G:/web/php/forum/public"
-
-  <Directory "G:/web/php/forum/public">
-    Options Indexes FollowSymLinks MultiViews
-    AllowOverride all
-    Require all granted
-  </Directory>
-
-</VirtualHost>
---------------------------------------------------
-
-Redémarrage de wamp et ajout dans le fichier
-hosts de windows du nom de domaine : "local.forum"
-
-Ouverture du projet avec phpstorm.
+Le principale, c'est d'avoir un serveur qui redirige toutes les requêtes vers le fichier `public/index.php`.

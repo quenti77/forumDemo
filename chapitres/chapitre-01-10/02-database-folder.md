@@ -1,17 +1,19 @@
-Chapitre 2: Création de la base de données et des dossiers
+## Chapitre 2 : Création de la base de données et des dossiers
 
 Requête SQL pour la création d'un utilisateur et de sa base de données
-
+```sql
 CREATE DATABASE tuto;
 CREATE USER 'tuto'@'localhost' IDENTIFIED BY 'tuto';
 GRANT ALL PRIVILEGES ON tuto.* TO 'tuto'@'localhost';
 FLUSH PRIVILEGES;
+```
 
-Création des différentes tables:
-    -> voir les fichiers create.sql et data.sql
+Une fois la base de données crée, vous pouvez importer la structure et les données via les fichiers :
+- `create.sql`
+- `data.sql`
 
-Création des différents dossiers:
-
+Création des différents dossiers :
+```
 forum/ (projet)
 ├──── app/ (notre application)
 │     ├──── controllers/ (gestion de l'action)
@@ -30,3 +32,4 @@ forum/ (projet)
       ├──── js/ (les scripts JS)
       ├──── .htaccess (Seulement pour apache)
       └──── index.php (Notre point d'entré de notre application)
+```
