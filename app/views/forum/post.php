@@ -24,7 +24,7 @@
 </div>
 <div class="row">
     <div class="col-sm-12">
-        <table class="table table-striped table-hover">
+        <table class="table table-striped table-bordered table-hover" style="margin-top: 16px">
             <thead>
             <tr>
                 <th style="width: 15%">Informations</th>
@@ -33,7 +33,7 @@
             </thead>
             <tbody>
             <?php foreach ($posts as $post): ?>
-                <tr class="<?= $post['resolved'] ? 'bg-success' : '' ?>">
+                <tr class="<?= $post['resolved'] ? 'success' : '' ?>">
                     <td class="text-center">
                         <div>
                             <a href="/">

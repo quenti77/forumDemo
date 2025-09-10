@@ -21,7 +21,7 @@
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
           crossorigin="anonymous" rel="stylesheet">
 
-    <link rel="stylesheet" href="https://bootswatch.com/4/flatly/bootstrap.min.css">
+    <link rel="stylesheet" href="https://bootswatch.com/3/darkly/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/css/main.css">
 
