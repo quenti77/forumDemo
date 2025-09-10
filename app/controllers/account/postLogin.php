@@ -8,7 +8,6 @@
 
 if (isset($_SESSION['auth'])) {
     redirectTo('/');
-    exit;
 }
 
 // Notre model users
@@ -36,7 +35,7 @@ if (empty($name) || empty($pass)) {
 }
 
 // Erreur 02 et 03 :
-// Notre champs name est pour le pseudo ou le mail
+// Notre champ name est pour le pseudo ou le mail
 $user = getUserByNameOrEmail($db, $name, $name);
 
 // Aucun utilisateur trouvé ou mdp incorrect
@@ -45,15 +44,15 @@ if ($user === false || !password_verify($pass, $user['password'])) {
 }
 
 // Erreur 04 :
-// Cette erreur ne doit être vérifié que si il n'y a pas d'erreur avant
+// Cette erreur ne doit être vérifiée que s'il n'y a pas d'erreur avant
 if (empty($errors) && $user['email_token'] !== null) {
     $errors[] = "Votre compte n'est pas actif. Merci de vérifier votre adresse mail";
 }
 
 if (empty($errors)) {
-    // On est bon on peut le connecter
+    // On est bon, on peut le connecter
 
-    // On regarde si on doit créer un cookie pour le "souvenir de moi"
+    // On regarde si on doit créer un cookie pour le "souvenir de moi".
     if (!empty($remember)) {
         // On génère le token pour le cookie
         $token = $user['id'].'---'.hash('sha512', $user['name'].'#~!*$'.$user['password']);
@@ -65,7 +64,7 @@ if (empty($errors)) {
 
     // On va donc sauvegarder notre tableau $user qui
     // correspond à l'utilisateur trouvé en bdd
-    // Sauf que l'on ne prends pas le mot de passe
+    // Sauf que l'on ne prend pas le mot de passe.
     unset($user['password']);
 
     // Et on doit y update la date de connexion

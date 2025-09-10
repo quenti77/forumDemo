@@ -1,3 +1,11 @@
+<?php
+/**
+ * @var string $csrf
+ * @var array $forum
+ * @var array $topic
+ * @var array $post
+ */
+?>
 <h3>
     Posté par <strong><?= $post['user_name'] ?></strong>
     le <?= postedAt($post)->format('d/m/Y à H:i:s') ?>
@@ -19,7 +27,7 @@
         <!-- Le contenu -->
         <div class="form-group">
             <label for="content">Votre réponse :</label>
-            <textarea placeholder="Le contenu de votre réponse ..." rows="7" class="form-control input-sm"
+            <textarea placeholder="Le contenu de votre réponse ..." rows="7" class="form-control input-sm" id="content"
                       name="content"><?= htmlentities($post['content']) ?></textarea>
         </div>
 

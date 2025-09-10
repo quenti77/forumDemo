@@ -1,3 +1,8 @@
+<?php
+/**
+ * @var array $post
+ */
+?>
 <div class="row text-center">
     <h1>Inscription</h1>
 </div>

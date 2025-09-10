@@ -42,7 +42,7 @@ function getUserByNameOrEmail(PDO $db, string $name, string $email): false|array
 function getUserById(PDO $db, int $userId): false|array
 {
     // Récupération des champs pour la table users
-    // ou l'id vaut $userId et prend en qu'un seul
+    // ou notre ID vaut $userId et prend en qu'un seul
     $reqSelect = $db->prepare(
         'SELECT id, name, password, email, email_token, register_at, connection_at, `rank`
         FROM users

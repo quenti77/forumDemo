@@ -1,3 +1,12 @@
+<?php
+/**
+ * @var string $csrf
+ * @var array|null $auth
+ * @var array $forum
+ * @var array $topic
+ * @var array $posts
+ */
+?>
 <h3>
     <?= $topic['name'] ?>
 </h3>
@@ -98,7 +107,7 @@
             <!-- Le contenu -->
             <div class="form-group">
                 <label for="content">Votre réponse :</label>
-                <textarea placeholder="Le contenu de votre réponse ..." rows="7"
+                <textarea placeholder="Le contenu de votre réponse ..." rows="7" id="content"
                           class="form-control input-sm" name="content"></textarea>
             </div>
 

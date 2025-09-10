@@ -1,3 +1,8 @@
+<?php
+/**
+ * @var array $count
+ */
+?>
 <section class="content-header">
     <h1>Tableau de board</h1>
 </section>

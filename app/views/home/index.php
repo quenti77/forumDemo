@@ -1,3 +1,8 @@
+<?php
+/**
+ * @var array $categories
+ */
+?>
 <h2>Bienvenue sur le forum</h2>
 
 <div class="row">

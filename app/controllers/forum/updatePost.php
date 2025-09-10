@@ -46,11 +46,11 @@ if ($auth['rank'] < ADMIN_RANK && $post['user_id'] !== $auth['id']) {
     // On n'a pas les droits
     setFlash('danger', 'Vous n\'êtes pas autorisé à modifier ce post');
 
-    // Première fois que l'on mets les variables directement
+    // Première fois que l'on met les variables directement
     redirectTo("/forums/{$forum['id']}/topics/{$topic['id']}");
 }
 
-// Si tout es bon on génère le token et on affiche la page
+// Si tout est bon, on génère le token et on affiche la page
 $csrf = generateToken();
 
 // Rendu de la page

@@ -9,10 +9,14 @@ define('APP', realpath(ROOT.'/app'));
 // On récupère notre url
 $url = $_SERVER['REQUEST_URI'] ?? $_GET['url'] ?? '';
 
-// On inclus les fonctions de base pour le MVC
+// On inclut les fonctions de base pour le MVC
 require APP.'/routes/router.php';
 require APP.'/controllers/controller.php';
 require APP.'/models/model.php';
+
+/**
+ * @var PDO $db
+ */
 
 // On charge PHPMailer
 require ROOT.'/libs/phpmailer/class.pop3.php';
@@ -36,7 +40,7 @@ if (!isset($_SESSION['auth']) && isset($_COOKIE['remember'])) {
         $id = (int)$values[0];
         $token = $values[1];
 
-        // On charge notre model (petit souci dans la fonction requireModel)
+        // On charge notre model (petit souci dans la fonction requireModel).
         requireModel('users');
 
         // On récupère l'user avec l'id
@@ -61,7 +65,7 @@ if (!isset($_SESSION['auth']) && isset($_COOKIE['remember'])) {
 $route = run(method(), $url);
 if ($route) {
     // Si on en trouve une
-    // On require le contrôleur demandé
+    // On inclut le contrôleur demandé
     $controllerPath = realpath(APP.'/controllers/'.$route['controller'].'.php');
     require $controllerPath;
 } else {

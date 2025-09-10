@@ -47,7 +47,7 @@ if (empty($errors)) {
 }
 
 if (empty($errors)) {
-    // On update le token de l'utilisateur
+    // On met à jour le token de l'utilisateur
     $user['email_token'] = null;
     updateUser($db, $user);
 

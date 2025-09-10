@@ -1,3 +1,8 @@
+<?php
+/**
+ * @var string $content
+ */
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -79,7 +84,7 @@
     </aside> <!-- aside.mainsidebar -->
 
     <div class="content-wrapper">
-        <?php $flash = (isset($_SESSION['flash'])) ? $_SESSION['flash'] : null; ?>
+        <?php $flash = $_SESSION['flash'] ?? null; ?>
         <?php if ($flash): ?>
             <?php unset($_SESSION['flash']); ?>
             <div class="alert alert-dismissible alert-<?= $flash['type'] ?>" role="alert">

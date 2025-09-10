@@ -63,10 +63,10 @@ function getCategory(PDO $db, int $idCategory): false|array
  * @param string $name
  * @param int $order
  */
-function insertCategory(PDO $db, string $name, int $order): PDOStatement
+function insertCategory(PDO $db, string $name, int $order): void
 {
     $reqInsert = $db->prepare('INSERT INTO categories (name, sorted) VALUES (:name, :order)');
-    $reqInsert->bindValue(':name', $name, PDO::PARAM_STR);
+    $reqInsert->bindValue(':name', $name);
     $reqInsert->bindValue(':order', $order, PDO::PARAM_INT);
     $reqInsert->execute();
 }
@@ -82,7 +82,7 @@ function insertCategory(PDO $db, string $name, int $order): PDOStatement
 function updateCategory(PDO $db, int $idCategory, string $name, int $order): void
 {
     $reqInsert = $db->prepare('UPDATE categories SET name = :name, sorted = :order WHERE id = :idCategory');
-    $reqInsert->bindValue(':name', $name, PDO::PARAM_STR);
+    $reqInsert->bindValue(':name', $name);
     $reqInsert->bindValue(':order', $order, PDO::PARAM_INT);
     $reqInsert->bindValue(':idCategory', $idCategory, PDO::PARAM_INT);
     $reqInsert->execute();

@@ -2,7 +2,7 @@
 
 /**
  * Notre page d'accueil affichera les catégories et les forums
- * Mais on peut bien sur mettre cette partie sur une autre URL.
+ * Mais on peut bien sûr mettre cette partie sur une autre URL.
  *
  * @var PDO $db
  */

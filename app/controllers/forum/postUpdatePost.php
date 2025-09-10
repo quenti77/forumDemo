@@ -40,6 +40,12 @@ if ($topic === false) {
 
 $idPost = getParam('idPost');
 $post = getPostById($db, $idPost);
+if ($post === false) {
+    // Le post que l'on demande n'existe pas
+    // On redirige avec un message flash
+    setFlash('danger', "Le post n'existe pas ou plus.");
+    redirectTo('/forums/'.$forum['id'].'/topics/'.$topic['id']);
+}
 
 // On regarde si on peut modifier le post ou pas
 if ($auth['rank'] < ADMIN_RANK && $post['user_id'] !== $auth['id']) {

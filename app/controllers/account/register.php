@@ -8,7 +8,7 @@ if (isset($_SESSION['auth'])) {
     redirectTo('/');
 }
 
-// On doit reprendre les données en post (à faire après)
+// On doit reprendre les données en post (à faire après).
 $post = sessionPost([
     'name' => '',
     'email' => ''

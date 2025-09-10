@@ -1,13 +1,13 @@
 <?php
 
 // On sauvegarde nos urls et on ça pointe dans ce tableau
-$routes = []; // PS: Nouvelle syntaxe des tableaux
+$routes = []; // PS : Nouvelle syntaxe des tableaux
 
 // Les redirections possibles
 $redirections = [
-    '301' => 'Moved Permanently',
-    '302' => 'Moved Temporarily',
-    '303' => 'See Other'
+    301 => 'Moved Permanently',
+    302 => 'Moved Temporarily',
+    303 => 'See Other'
 ];
 
 /**
@@ -17,19 +17,19 @@ $redirections = [
  * @param string $url
  * @return string
  */
-function trimUrl($url)
+function trimUrl(string $url): string
 {
     // On enlève les / de début et de fin
-    // On passe de "/news/1//" à "news/1"
+    // On passe de "/news/1//" à "news/1".
     $url = trim($url, '/');
 
-    // Mais si on a par exemple "/" alors ça deviens du vide
+    // Mais si on a par exemple "/" alors ça devient du vide
     // Et on veut garder au minimum le "/"
     if (empty($url)) {
         return '/';
     }
 
-    // Si c'est pas vide on retourne ce que l'on a trim
+    // Si ce n'est pas vide on retourne ce que l'on a trim.
     return $url;
 }
 
@@ -40,12 +40,12 @@ function trimUrl($url)
  * @param int $code
  * @return never
  */
-function redirectTo($url, $code = 301): never
+function redirectTo(string $url, int $code = 301): never
 {
-    // On récupère nos code de redirections possible
+    // On récupère nos codes de redirections possible
     global $redirections;
 
-    if (!in_array($code, $redirections)) {
+    if (!in_array($code, $redirections, true)) {
         $code = 301;
     }
 
@@ -63,7 +63,7 @@ function redirectTo($url, $code = 301): never
  * @param string $url
  * @param string $controller
  */
-function addRoute($method, $url, $controller)
+function addRoute(string $method, string $url, string $controller): void
 {
     // On a besoin de nos routes
     global $routes;
@@ -77,12 +77,12 @@ function addRoute($method, $url, $controller)
 }
 
 /**
- * Permet de retourner la méthode utilisé par HTTP
- * pour venir sur la page. GET, POST, PUT, PATCH, DELETE, ...
+ * Permet de retourner la méthode utilisée par HTTP
+ * pour venir sur la page. GET, POST, PUT, PATCH, DELETE, etc.
  *
  * @return string
  */
-function method()
+function method(): string
 {
     if (isset($_SERVER['REQUEST_METHOD'])) {
         return strtolower($_SERVER['REQUEST_METHOD']);
@@ -92,36 +92,36 @@ function method()
 }
 
 /**
- * Regarde si l'url demandé match l'url en cible
+ * Regarde si l'URL demandé match l'URL en cible
  *
  * @param string $urlCheck
  * @param string $urlTarget
  * @return bool
  */
-function urlMatch($urlCheck, $urlTarget)
+function urlMatch(string $urlCheck, string $urlTarget): bool
 {
     // On transforme les : puis un nom en une regex qui va pouvoir
-    // trouver les variables qui sont dans l'url
+    // trouver les variables qui sont dans l'URL
     $subRegex = preg_replace('#:([\w]+)#', '([^/]+)', $urlTarget);
 
-    // On l'inclu dans une regex
+    // On l'inclut dans une regex
     $regexTarget = "#^{$subRegex}$#i"; // Explication du {$var}
 
     // On regarde si notre url que l'on check match ou pas
     // avec la regex de notre url cible
     if (!preg_match($regexTarget, $urlCheck, $matchValue)) {
-        // ça na pas match donc on return directement false
-        // car c'est pas la bonne url
+        // ça n'a pas match donc on retourne directement false
+        // car ce n'est pas la bonne url
         return false;
     }
 
-    // Si preg_match à fonctionner alors $matchValue contient les valeur
-    // des variables de l'url. Ex: /news/2 => le 2 est dans le tableau
+    // Si preg_match à fonctionner alors $matchValue contient les valeurs
+    // des variables de l'URL. Ex: "/news/2" => le 2 est dans le tableau
 
     // On enlève le premier résultat qui nous intéresse pas
     array_shift($matchValue);
 
-    // On prends les noms des variables que l'on va associé aux valeurs
+    // On prend les noms des variables que l'on va associé aux valeurs
     // et que l'on va mettre dans le tableau $_GET
     preg_match($regexTarget, $urlTarget, $matchName);
     array_shift($matchName); // Pareil que pour matchValue
@@ -151,24 +151,24 @@ function run(string $method, string $url): array|false
     // On récupère nos routes
     global $routes;
 
-    // On trim l'URL demandé
+    // On retire les caractères en début et fin de chaîne.
     $url = trimUrl($url);
 
-    // Si la méthode utilisée (GET, POST, ...) n'a aucune route
+    // Si la méthode utilisée (GET, POST, etc.) n'a aucune route
     // ça ne sert à rien de continuer.
     if (!isset($routes[$method])) {
         return false;
     }
 
-    // On boucle nos routes qui sont dans la méthode demandé
+    // On boucle nos routes qui sont dans la méthode demandée
     foreach ($routes[$method] as $route) {
         // On regarde si ça match
         if (urlMatch($url, $route['url'])) {
-            // Si c'est bon on retourne notre route
+            // Si c'est bon, on retourne notre route
             return $route;
         }
     }
 
-    // Sinon c'est que l'on a pas trouver de route qui match
+    // Sinon c'est que l'on n'a pas trouvé de route qui match
     return false;
 }

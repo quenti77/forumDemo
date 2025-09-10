@@ -8,7 +8,6 @@
 
 if (isset($_SESSION['auth'])) {
     redirectTo('/');
-    exit;
 }
 
 // On charge notre model pour les utilisateurs
@@ -19,9 +18,9 @@ requireModel('users');
 $name = getParam('name');
 $email = getParam('email');
 $pass = getParam('pass');
-$pass_confirm = getParam('pass_confirm'); // Le seul moment ou je mets un _ dans une variable
+$passConfirm = getParam('pass_confirm');
 
-// On gère nos erreurs possible via ce tableau
+// On gère nos erreurs possibles via ce tableau
 $errors = [];
 
 /**
@@ -37,7 +36,7 @@ $errors = [];
 
 // Erreur 01 :
 if (empty($name) || empty($email) ||
-    empty($pass) || empty($pass_confirm)) {
+    empty($pass) || empty($passConfirm)) {
 
     // Si l'un des champs obligatoires est vide,
     // c'est qu'il n'est pas remplie
@@ -69,7 +68,7 @@ if ($passLength < 8) {
 }
 
 // Erreur 05 :
-if ($pass !== $pass_confirm) {
+if ($pass !== $passConfirm) {
     $errors[] = 'Vos mots de passe ne sont pas identique';
 }
 
@@ -86,15 +85,15 @@ if ($user) {
     $errors[] = 'Un compte existe déjà avec le pseudo ou le mail que vous avez choisi';
 }
 
-// Une fois toutes les erreurs vérifié
-// on regarde s'il y en a eu ou non
+// Une fois toutes les erreurs vérifiées
+// on regarde, s'il y en a eu ou non
 if (empty($errors)) {
     // Aucune erreur
 
     // On met dans un tableau les données que l'on veut inscrire.
     // Il s'agit donc d'une représentation.
 
-    // On remplace notre variable user d'avant mais, ce n'est
+    // On remplace notre variable 'user' d'avant mais, ce n'est
     // pas grave, car on en veut plus.
     $user = [
         'name' => $name,
@@ -125,7 +124,7 @@ if (empty($errors)) {
     // On indique que l'on veut envoyer le mail via du SMTP
     $mail->isSMTP();
 
-    // On indique notre serveur SMTP (local avec mailpit)
+    // On indique notre serveur SMTP (local avec mailpit).
     $mail->Host = '127.0.0.1';
     $mail->Port = 1025;
     $mail->SMTPAuth = false;
@@ -142,7 +141,7 @@ if (empty($errors)) {
     $mail->addAddress($email, explode('@', $email)[0]);
 
     // On définit notre mail en HTML
-    $mail->isHTML(true);
+    $mail->isHTML();
 
     // Subject
     $mail->Subject = 'Vérification de votre adresse mail - MonSuperForum';

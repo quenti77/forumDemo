@@ -102,7 +102,7 @@ function getParam(string $field): string|null
 }
 
 /**
- * Permet de générer un token csrf que l'on mets en session
+ * Permet de générer un token csrf que l'on met en session
  *
  * @return string
  */
@@ -121,7 +121,7 @@ function render($page, $layout = null, $variables = []): void
     extract($variables);
 
     // Ajout d'une variable représentant l'utilisateur
-    // connecté ou null s'il ne l'es pas.
+    // connecté ou null s'il ne l'est pas.
     $auth = $_SESSION['auth'] ?? null;
 
     // Rendu de notre page

@@ -1,3 +1,10 @@
+<?php
+/**
+ * @var array|null $auth
+ * @var array $forum
+ * @var array $topics
+ */
+?>
 <h3>
     <?= $forum['name'] ?>
 </h3>

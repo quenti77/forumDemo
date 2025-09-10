@@ -1,3 +1,8 @@
+<?php
+/**
+ * @var array $post
+ */
+?>
 <div class="row text-center">
     <h1>Connexion</h1>
 </div>

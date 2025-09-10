@@ -36,12 +36,12 @@ foreach ($result as $topic) {
     $topics[] = (int)$topic['id'];
 }
 
-// Suppression des posts lié au topics
+// Suppression des posts liés au topics
 if (!empty($topics)) {
     deletePostsByTopics($db, $topics);
 }
 
-// Suppression des topics lié au forums
+// Suppression des topics lié au forum
 deleteTopicsByForums($db, [$idForum]);
 
 // Suppression du forum

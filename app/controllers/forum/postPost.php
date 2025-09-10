@@ -73,7 +73,7 @@ if (empty($errors)) {
     setFlash('success', 'Votre réponse a été envoyé avec succès');
 
 } else {
-    // Sinon on redirige avec une erreur
+    // Sinon, on redirige avec une erreur
     setErrors($errors, compact('content'));
 }
 

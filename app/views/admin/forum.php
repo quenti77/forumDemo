@@ -1,3 +1,10 @@
+<?php
+/**
+ * @var string $csrf
+ * @var array $categories
+ * @var array $forums
+ */
+?>
 <section class="content-header">
     <h1>Gestion des catégories et forums</h1>
 </section>
@@ -28,7 +35,7 @@
                             <label for="name">
                                 Index :
                             </label>
-                            <input type="number" name="order" id="order" class="form-control"
+                            <input type="number" name="order" id="order" class="form-control" id="name"
                                    placeholder="La nouvelle position (ou 0 si vous ne voulez pas changer)">
                         </div>
                     </div>
@@ -70,12 +77,16 @@
                                     <input type="hidden" name="csrf" value="<?= $csrf ?>">
 
                                     <td class="text-center">
-                                        <input type="number" name="order" value="<?= $category['sorted'] ?>"
-                                               class="form-control">
+                                        <label>
+                                            <input type="number" name="order" value="<?= $category['sorted'] ?>"
+                                                   class="form-control">
+                                        </label>
                                     </td>
                                     <td>
-                                        <input type="text" name="name" value="<?= $category['name'] ?>"
-                                               class="form-control">
+                                        <label>
+                                            <input type="text" name="name" value="<?= $category['name'] ?>"
+                                                   class="form-control">
+                                        </label>
                                     </td>
                                     <td>
                                         <button type="submit" class="btn btn-success">
@@ -145,7 +156,7 @@
                                 Description du forum :
                             </label>
                             <input type="text" name="description" id="description" class="form-control"
-                                   placeholder="La description de votre forum">
+                                   placeholder="La description de votre forum" id="name">
                         </div>
                     </div>
 
@@ -187,7 +198,7 @@
                                     <td class="text-center">
                                         <select name="category" id="category" class="form-control">
                                             <?php foreach ($categories as $category): ?>
-                                                <?php if ($category['id'] == $forum['category_id']): ?>
+                                                <?php if ($category['id'] === $forum['category_id']): ?>
                                                     <option value="<?= $category['id'] ?>" selected>
                                                         <?= $category['name'] ?>
                                                     </option>
@@ -200,10 +211,15 @@
                                         </select>
                                     </td>
                                     <td>
-                                        <input type="text" name="name" value="<?= $forum['name'] ?>"
-                                               class="form-control"><br>
-                                        <input type="text" name="description" value="<?= $forum['description'] ?>"
-                                               class="form-control">
+                                        <label>
+                                            <input type="text" name="name" value="<?= $forum['name'] ?>"
+                                                   class="form-control">
+                                        </label>
+                                        <br>
+                                        <label>
+                                            <input type="text" name="description" value="<?= $forum['description'] ?>"
+                                                   class="form-control">
+                                        </label>
                                     </td>
                                     <td>
                                         <button type="submit" class="btn btn-success">

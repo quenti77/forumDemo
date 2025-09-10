@@ -1,5 +1,5 @@
 <?php
-// On supprime la case pour l'auth sur la session
+// On supprime la case pour l'authentification sur la session
 unset($_SESSION['auth']);
 
 // On supprime le cookie aussi
