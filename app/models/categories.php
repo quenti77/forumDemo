@@ -24,7 +24,7 @@ function getCategoriesAndForums(PDO $db): PDOStatement
             ON P.id = F.last_post_id
         LEFT JOIN users AS U
             ON U.id = P.user_id
-        ORDER BY C.sorted, C.id, forum_id');
+        ORDER BY C.sorted DESC, C.id, forum_id');
 
     $reqSelect->execute();
     return $reqSelect;

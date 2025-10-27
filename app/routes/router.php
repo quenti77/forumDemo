@@ -84,11 +84,7 @@ function addRoute(string $method, string $url, string $controller): void
  */
 function method(): string
 {
-    if (isset($_SERVER['REQUEST_METHOD'])) {
-        return strtolower($_SERVER['REQUEST_METHOD']);
-    }
-
-    return 'get';
+    return mb_strtolower($_SERVER['REQUEST_METHOD'] ?? 'get');
 }
 
 /**

@@ -79,10 +79,12 @@
                                     </form>
                                 <?php endif; ?>
 
-                                <a href="/forums/<?= $forum['id'] ?>/topics/<?= $topic['id'] ?>/posts/<?= $post['post_id'] ?>/update"
-                                   class="btn btn-info btn-sm">
-                                    <i class="fa fa-pencil"></i>
-                                </a>
+                                <?php if (checkPermit($auth, $post)): ?>
+                                    <a href="/forums/<?= $forum['id'] ?>/topics/<?= $topic['id'] ?>/posts/<?= $post['post_id'] ?>/update"
+                                       class="btn btn-info btn-sm">
+                                        <i class="fa fa-pencil"></i>
+                                    </a>
+                                <?php endif; ?>
                             </div>
                         <?php endif; ?>
                         <div>
